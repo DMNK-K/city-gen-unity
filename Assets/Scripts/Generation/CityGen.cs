@@ -59,6 +59,10 @@ public class CityGen : MonoBehaviour
         diagnostics.DebugDrawStreetLineCorners(streetLines, 300f);
         List<Intersection> intersections = lineVerticalizer.ConvertIntersectionPointsToIntersections(interPoints);
         List<Street> streets = lineVerticalizer.ConvertStreetLinesToStreets(streetLines);
+        for (int i = 0; i < intersections.Count; i++)
+        {
+            intersections[i].ExtractConnected();
+        }
         yield return StartCoroutine(streetMeshGen.GenerateIntersectionMeshes(intersections));
         yield return StartCoroutine(streetMeshGen.GenerateStreetMeshes(streets));
         FinalizeGeneration();

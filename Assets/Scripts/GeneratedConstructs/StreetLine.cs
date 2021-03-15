@@ -167,4 +167,43 @@ public class StreetLine
             DB.Log("This StreetLine already had its CorrespondingStreet made and assigned.");
         }
     }
+
+    /// <summary>
+    /// Returns a list of StreetLines that have at least one end on the rim of the city circle, sorted by where that end is on the circle in terms of the angle it forms with the center, clockwise.
+    /// <para>Lines that have both ends on the rim (very rare, only possible in low counts of street lines) are duplicated and in 2 different spots in the sort to reflect positions of both of their ends.</para>
+    /// </summary>
+    public static List<StreetLine> ExtractLinesOnRimSortedByAngleOfEnd(List<StreetLine> lines)
+    {
+        List<StreetLine> result = new List<StreetLine>();
+        List<StreetLine> duplicatesToBeInserted = new List<StreetLine>();
+        for (int i = 0; i < lines.Count; i++)
+        {
+            if (lines[i].AOnRim || lines[i].BOnRim) { result.Add(lines[i]); }
+            if (lines[i].AOnRim && lines[i].BOnRim) { duplicatesToBeInserted.Add(lines[i]); }
+        }
+        result.Sort((x, y) => (x.AngleOfRimEnd() < y.AngleOfRimEnd() ? -1 : 1));
+        //this is kinda ineficcient, caching the angles somewhere would be better, but
+        //the duplicates are so rare creating a separate class for the sort results is meh
+        for (int i = 0; i < duplicatesToBeInserted.Count; i++)
+        {
+            float angle = Vector2.SignedAngle(-Vector2.up, duplicatesToBeInserted[i].Dir);
+            for (int o = 0; o < result.Count; o++)
+            {
+                float anglePrev = result[GS.TrueMod(o - 1, result.Count)].AngleOfRimEnd();
+                float angleCurr = result[o].AngleOfRimEnd();
+                if (angle >= anglePrev && angle <= angleCurr)
+                {
+                    result.Insert(0, duplicatesToBeInserted[i]);
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    public float AngleOfRimEnd()
+    {
+        if (!AOnRim && !BOnRim) { return 0; }
+        return Vector2.SignedAngle(-Vector2.up, (AOnRim) ? -Dir : Dir);
+    }
 }

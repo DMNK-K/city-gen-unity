@@ -8,6 +8,7 @@ public class Intersection
     public IntersectionPoint Point { get; private set; } = null;
     public Vector3 Position { get; private set; }
     public List<Vector3> Corners { get; private set; }
+    public List<Street> Connected { get; private set; } = new List<Street>();
 
     public Intersection(IntersectionPoint interPoint, float elev)
     {
@@ -23,6 +24,17 @@ public class Intersection
         if (Corners.Count != 4)
         {
             DB.Error("Invalid number of Corners in Intersection.");
+        }
+    }
+
+    public void ExtractConnected()
+    {
+        for (int i = 0; i < Point.Connected.Count; i++)
+        {
+            if (Point.Connected[i].CorrespondingStreet != null)
+            {
+                Connected.AddIfAbsent(Point.Connected[i].CorrespondingStreet);
+            }
         }
     }
 

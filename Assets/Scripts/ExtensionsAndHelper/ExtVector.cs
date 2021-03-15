@@ -43,6 +43,11 @@ public static class ExtVector
         return new Vector2(Mathf.Abs(v.x), Mathf.Abs(v.y));
     }
 
+    public static Vector3 Abs(this Vector3 v)
+    {
+        return new Vector3(Mathf.Abs(v.x), Mathf.Abs(v.y), Mathf.Abs(v.z));
+    }
+
     public static Vector2Int RoundToInt(this Vector2 v2)
     {
         return new Vector2Int(Mathf.RoundToInt(v2.x), Mathf.RoundToInt(v2.y));
@@ -207,5 +212,20 @@ public static class ExtVector
     public static bool Similar(this Vector2 v2, Vector2 other, float tolerance = 0.001f)
     {
         return (Mathf.Abs(v2.x - other.x) < tolerance && Mathf.Abs(v2.y - other.y) < tolerance);
+    }
+
+    public static bool Similar(this Vector3 v3, Vector3 other, float tolerance = 0.001f)
+    {
+        Vector3 diff = (v3 - other).Abs();
+        return (diff.x < tolerance && diff.y < tolerance && diff.z < tolerance);
+    }
+
+    public static Vector2 RotateAroundPivot(this Vector2 v, Vector2 pivot, float angle)
+    {
+        float radians = angle * Mathf.PI / 180f;
+        v -= pivot;
+        float cos = Mathf.Cos(radians);
+        float sin = Mathf.Sin(radians);
+        return pivot + new Vector2(v.x * cos + v.y * sin, -v.x * sin + v.y * cos);
     }
 }

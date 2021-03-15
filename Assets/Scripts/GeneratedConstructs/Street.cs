@@ -5,6 +5,8 @@ using UnityEngine;
 public class Street
 {
     public StreetLine Line { get; private set; }
+    public Vector2 A { get { return Line.A; } }
+    public Vector2 B { get { return Line.B; } }
     public Intersection InterA { get; private set; } = null;
     public Intersection InterB { get; private set; } = null;
 
@@ -25,6 +27,7 @@ public class Street
 
     public Street(StreetLine line, ElevationGen elevGen)
     {
+        if (line == null) { DB.Error("Trying to create Street from null StreetLine."); }
         Line = line;
         Line.SetCorrespondingStreet(this);
         Width = line.VirtualWidth;
@@ -155,6 +158,24 @@ public class Street
         }
         edgePointsLeft.Add(CornerBL);
         edgePointsRight.Add(CornerBR);
+    }
+
+    /// <summary>
+    /// Gets the Intersection on the other end of this street from currentSide. Null when the other end is on a rim or when currenSide is invalid.
+    /// </summary>
+    public Intersection GetOtherSide(Intersection currentSide)
+    {
+        if (currentSide == null) { return null; }
+        if (currentSide == InterA)
+        {
+            return InterB;
+        }
+        if (currentSide == InterB)
+        {
+            return InterA;
+        }
+        DB.Log("currentSide is not a correct side of this street");
+        return null;
     }
 
     public Mesh BuildMesh()
