@@ -9,14 +9,14 @@ public class CityBlock
     //private Vector3 rawCenter3D;
     public Vector3 Center3D { get; private set; }
     public Vector2 Center { get { return Center3D.UnShiftToV2(); } }
-
+    private List<Vector3> corners;
 
     public CityBlock(List<StreetTraversal> traversedBounds, bool hasRimSkip)
     {
         Bounds = new List<Street>();
+        corners = new List<Vector3>();
         OnRim = hasRimSkip;
         Vector3 sum = Vector3.zero;
-        int count = 0;
         //since the alg for finding CityBlocks runs clockwise
         //the corners for calculating the center will always be
         //on the right when the street was traversed from A to B,
@@ -28,16 +28,42 @@ public class CityBlock
         for (int i = 0; i < traversedBounds.Count; i++)
         {
             Bounds.Add(traversedBounds[i].Street);
-            sum += (traversedBounds[i].FromAToB) ? traversedBounds[i].Street.CornerAR : traversedBounds[i].Street.CornerBL;
-            count++;
+            Vector3 corner = (traversedBounds[i].FromAToB) ? traversedBounds[i].Street.CornerAR : traversedBounds[i].Street.CornerBL;
+            sum += corner;
+            corners.Add(corner);
             bool rimSkipAhead = (traversedBounds[i].FromAToB) ? traversedBounds[i].Street.Line.BOnRim : traversedBounds[i].Street.Line.AOnRim;
             if (rimSkipAhead)
             {
-                sum += (traversedBounds[i].FromAToB) ? traversedBounds[i].Street.CornerBR : traversedBounds[i].Street.CornerAL;
-                count++;
+                corner = (traversedBounds[i].FromAToB) ? traversedBounds[i].Street.CornerBR : traversedBounds[i].Street.CornerAL;
+                sum += corner;
+                corners.Add(corner);
             }
         }
-        Center3D = sum / count;
+        Center3D = sum / corners.Count;
+    }
+
+    public Mesh BuildMesh()
+    {
+        Mesh m = new Mesh();
+        List<Vector3> verts = new List<Vector3>(corners.Count + 1);
+        for (int i = 0; i < corners.Count; i++)
+        {
+            verts.Add(corners[i] - Center3D);
+        }
+        verts.Add(Vector3.zero);
+        List<int> tris = new List<int>();
+        for (int i = 0; i < verts.Count - 1; i++)
+        {
+            tris.Add(i);
+            tris.Add(GS.TrueMod(i + 1, verts.Count - 1));
+            tris.Add(verts.Count - 1);
+        }
+        m.vertices = verts.ToArray();
+        m.triangles = tris.ToArray();
+        m.RecalculateBounds();
+        m.RecalculateNormals();
+        m.RecalculateTangents();
+        return m;
     }
 
     public override string ToString()
@@ -47,10 +73,9 @@ public class CityBlock
 
     public void DebugDraw(float time)
     {
-        for (int i = 0; i < Bounds.Count; i++)
+        for (int i = 0; i < corners.Count; i++)
         {
-            Debug.DrawLine(Center3D, Bounds[i].A.ShiftToV3(), Color.green, time);
-            Debug.DrawLine(Center3D, Bounds[i].B.ShiftToV3(), Color.green, time);
+            Debug.DrawLine(Center3D, corners[i], Color.green, time);
         }
     }
 }

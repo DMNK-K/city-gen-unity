@@ -7,6 +7,9 @@ public class CityBlockGen : MonoBehaviour
     private CityGen cityGen;
     public List<CityBlock> Blocks { get; private set; }
 
+    [SerializeField]
+    private MeshFilter prefabCityBlock;
+
     private void Awake()
     {
         cityGen = GetComponent<CityGen>();
@@ -140,5 +143,19 @@ public class CityBlockGen : MonoBehaviour
             }
         }
         return new StreetTraversal(linesWithEndOnRim[0].Line.CorrespondingStreet, linesWithEndOnRim[0].AngularPosCalculatedFromA);
+    }
+
+    public IEnumerator GenerateCityBlockTerrainMeshes()
+    {
+        if (prefabCityBlock == null) { yield break; }
+        DB.Log("GENERATING TERRAIN MESHES FOR CITY BLOCKS", 1);
+        for (int i = 0; i < Blocks.Count; i++)
+        {
+            Mesh mesh = Blocks[i].BuildMesh();
+            MeshFilter inst = Instantiate(prefabCityBlock, Blocks[i].Center3D, Quaternion.identity);
+            inst.mesh = mesh;
+            inst.GetComponent<MeshCollider>().sharedMesh = mesh;
+            yield return null;
+        }
     }
 }

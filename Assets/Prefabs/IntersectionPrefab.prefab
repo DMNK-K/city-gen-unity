@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5453087541088104669}
   - component: {fileID: 4356242851033506737}
   - component: {fileID: 5382593738018667823}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: IntersectionPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}

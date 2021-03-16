@@ -72,11 +72,12 @@ public class CityGen : MonoBehaviour
         yield return StartCoroutine(streetMeshGen.GenerateIntersectionMeshes(intersections));
         yield return StartCoroutine(streetMeshGen.GenerateStreetMeshes(streets));
         List<RimStreetLine> streetLinesOnRim = StreetLine.ExtractRimStreetLines(streetLines);
-        for (int i = 0; i < streetLinesOnRim.Count; i++)
-        {
-            DB.Log("angle: " + streetLinesOnRim[i].AngularPosOnRim);
-        }
+        //for (int i = 0; i < streetLinesOnRim.Count; i++)
+        //{
+        //    DB.Log("angle: " + streetLinesOnRim[i].AngularPosOnRim);
+        //}
         yield return StartCoroutine(cityBlockGen.ExtractCityBlocks(intersections, streetLinesOnRim));
+        yield return StartCoroutine(cityBlockGen.GenerateCityBlockTerrainMeshes());
         FinalizeGeneration();
     }
 
