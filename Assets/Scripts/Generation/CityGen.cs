@@ -16,6 +16,7 @@ public class CityGen : MonoBehaviour
     private CityGenDiagnostics diagnostics;
     private StreetLineVerticalizer lineVerticalizer;
     private StreetMeshGen streetMeshGen;
+    private CityBlockGen cityBlockGen;
 
     private void Awake()
     {
@@ -24,6 +25,7 @@ public class CityGen : MonoBehaviour
         diagnostics = GetComponent<CityGenDiagnostics>();
         lineVerticalizer = GetComponent<StreetLineVerticalizer>();
         streetMeshGen = GetComponent<StreetMeshGen>();
+        cityBlockGen = GetComponent<CityBlockGen>();
     }
 
     void Start()
@@ -50,6 +52,10 @@ public class CityGen : MonoBehaviour
 
     IEnumerator Generate()
     {
+        float testangle1 = -Vector2.SignedAngle(Vector2.up, new Vector2(1, 1));
+        float testangle2 = -Vector2.SignedAngle(Vector2.up, new Vector2(-1, 1));
+        DB.Log($"testangle1: {testangle1} | testangle2: {testangle2}");
+
         yield return StartCoroutine(lineGen.GenStreetLines());
         yield return StartCoroutine(lineGen.FillIntersectionPointConnections());
         List<StreetLine> streetLines = lineGen.GetPlaced();
@@ -65,6 +71,12 @@ public class CityGen : MonoBehaviour
         }
         yield return StartCoroutine(streetMeshGen.GenerateIntersectionMeshes(intersections));
         yield return StartCoroutine(streetMeshGen.GenerateStreetMeshes(streets));
+        List<RimStreetLine> streetLinesOnRim = StreetLine.ExtractRimStreetLines(streetLines);
+        for (int i = 0; i < streetLinesOnRim.Count; i++)
+        {
+            DB.Log("angle: " + streetLinesOnRim[i].AngularPosOnRim);
+        }
+        yield return StartCoroutine(cityBlockGen.ExtractCityBlocks(intersections, streetLinesOnRim));
         FinalizeGeneration();
     }
 

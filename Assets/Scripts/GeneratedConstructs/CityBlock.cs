@@ -38,18 +38,19 @@ public class CityBlock
             }
         }
         Center3D = sum / count;
-
-        ///To figure out the center we need the correct corners of streets which
-        ///are the bounds of this CityBlock.
-        ///The correct corners are the closer ones from the pairs of corners situated
-        ///on ends of the street (A1 A2 and B1 B2), but to know which ones are the closer ones
-        ///we need some other point from which to get the distance from. This is why rawCenter3D
-        ///exists, which is a center computed from the points of the StreetLine that sits at the basis
-        ///of every Street object. This rawCenter3D will usually be pretty close to the actual Center,
-        ///sometimes even equal, but it can also not be, because streets have different widths. That is why
-        ///the alg even needs to bother with finding the corners of streets - to account for how thick Streets are.
-
-
     }
 
+    public override string ToString()
+    {
+        return $"CityBlock with Center3D at {Center3D} has {Bounds.Count} streets as bounds. OnRim={OnRim}";
+    }
+
+    public void DebugDraw(float time)
+    {
+        for (int i = 0; i < Bounds.Count; i++)
+        {
+            Debug.DrawLine(Center3D, Bounds[i].A.ShiftToV3(), Color.green, time);
+            Debug.DrawLine(Center3D, Bounds[i].B.ShiftToV3(), Color.green, time);
+        }
+    }
 }

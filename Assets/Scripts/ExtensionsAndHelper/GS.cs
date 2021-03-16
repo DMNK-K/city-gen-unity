@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// Global Script class with helper methods for various purposes that don't really belong to anywhere in specific.
+/// </summary>
 public class GS : MonoBehaviour
 {
     public static LayerMask MaskRimSphere = (1 << 10);

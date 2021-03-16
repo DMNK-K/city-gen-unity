@@ -428,6 +428,7 @@ GameObject:
   - component: {fileID: 1856975218}
   - component: {fileID: 1856975219}
   - component: {fileID: 1856975220}
+  - component: {fileID: 1856975221}
   m_Layer: 0
   m_Name: GenManager
   m_TagString: Untagged
@@ -564,3 +565,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabIntersection: {fileID: 5382593738018667823, guid: a10cfc4371dcb6d4ba1456b9497961d6, type: 3}
   prefabStreet: {fileID: 8826303261615064016, guid: 7f9ed783c214b624d83c70f0bb7906b1, type: 3}
+--- !u!114 &1856975221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1856975212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 215a497464299ee4a8742bd17b848ac4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
