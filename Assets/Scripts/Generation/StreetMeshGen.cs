@@ -8,6 +8,8 @@ public class StreetMeshGen : MonoBehaviour
     private MeshFilter prefabIntersection;
     [SerializeField]
     private MeshFilter prefabStreet;
+    [SerializeField]
+    private MeshFilter prefabSidewalk;
 
     public IEnumerator GenerateIntersectionMeshes(List<Intersection> inters)
     {
@@ -15,25 +17,34 @@ public class StreetMeshGen : MonoBehaviour
         for (int i = 0; i < inters.Count; i++)
         {
             Mesh mesh = inters[i].BuildMesh();
-            if (mesh == null) { continue; }
-            MeshFilter mf = Instantiate(prefabIntersection, inters[i].Position, Quaternion.identity);
-            mf.name = "Intersection" + inters[i].Position.x + "_" + inters[i].Position.z;
-            mf.mesh = mesh;
+            string name = "Intersection" + inters[i].Position.x + "_" + inters[i].Position.z;
+            InstantiateMesh(mesh, prefabIntersection, inters[i].Position, Quaternion.identity, name);
             yield return null;
         }
     }
 
     public IEnumerator GenerateStreetMeshes(List<Street> streets)
     {
-        if (prefabStreet == null) { yield break; }
+        if (prefabStreet == null || prefabSidewalk == null) { yield break; }
         for (int i = 0; i < streets.Count; i++)
         {
-            Mesh mesh = streets[i].BuildMesh();
-            if (mesh == null) { continue; }
-            MeshFilter mf = Instantiate(prefabStreet, Vector3.zero, Quaternion.identity);
-            mf.name = "Street";
-            mf.mesh = mesh;
+            Mesh mesh = streets[i].BuildCarLanesMesh();
+            InstantiateMesh(mesh, prefabStreet, Vector3.zero, Quaternion.identity, "Street");
+
+            mesh = streets[i].BuildSidewalkMeshLeft();
+            InstantiateMesh(mesh, prefabSidewalk, Vector3.zero, Quaternion.identity, "SidewalkL");
+
+            mesh = streets[i].BuildSidewalkMeshRight();
+            InstantiateMesh(mesh, prefabSidewalk, Vector3.zero, Quaternion.identity, "SidewalkR");
             yield return null;
         }
+    }
+
+    private MeshFilter InstantiateMesh(Mesh mesh, MeshFilter prefab, Vector3 pos, Quaternion rot, string name)
+    {
+        MeshFilter mf = Instantiate(prefab, pos, rot);
+        mf.gameObject.name = name;
+        mf.mesh = mesh;
+        return mf;
     }
 }

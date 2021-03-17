@@ -229,4 +229,26 @@ public static class ExtMesh
         }
     }
     #endregion Subdivide
+
+    public static Mesh BuildMesh(List<Vector3> verts, List<int> tris)
+    {
+        Mesh m = new Mesh();
+        m.vertices = verts.ToArray();
+        m.triangles = tris.ToArray();
+        m.RecalculateBounds();
+        m.RecalculateNormals();
+        m.RecalculateTangents();
+        return m;
+    }
+
+    public static Mesh BuildMesh(List<Vector3> verts, List<int> tris, List<Vector3> normals)
+    {
+        Mesh m = new Mesh();
+        m.vertices = verts.ToArray();
+        m.triangles = tris.ToArray();
+        m.normals = normals.ToArray();
+        m.RecalculateBounds();
+        m.RecalculateTangents();
+        return m;
+    }
 }

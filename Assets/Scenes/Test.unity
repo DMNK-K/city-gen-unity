@@ -469,7 +469,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rimRadius: 500
-  laneWidth: 3
+  carLaneWidth: 3
+  sidewalkWidth: 1.2
 --- !u!4 &1856975215
 Transform:
   m_ObjectHideFlags: 0
@@ -565,6 +566,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabIntersection: {fileID: 5382593738018667823, guid: a10cfc4371dcb6d4ba1456b9497961d6, type: 3}
   prefabStreet: {fileID: 8826303261615064016, guid: 7f9ed783c214b624d83c70f0bb7906b1, type: 3}
+  prefabSidewalk: {fileID: 8826303261615064016, guid: b42f5b03333830c48bdf0e36e83f6cd9, type: 3}
 --- !u!114 &1856975221
 MonoBehaviour:
   m_ObjectHideFlags: 0

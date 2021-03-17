@@ -7,10 +7,15 @@ public class CityGen : MonoBehaviour
     [SerializeField]
     private float rimRadius = 1000;
     [SerializeField]
-    private float laneWidth = 3f;
+    private float carLaneWidth = 3f;
+    [SerializeField]
+    private float sidewalkWidth = 1.2f;
 
     public float RimRadius { get { return rimRadius; } }
-    public float LaneWidth { get { return laneWidth; } }
+    public float CarLaneWidth { get { return carLaneWidth; } }
+    public float SidewalkWidth { get { return sidewalkWidth; } }
+    public float LaneWidth { get; private set; }
+
     private StreetLineGen lineGen;
     private StreetLineExpander lineExpander;
     private CityGenDiagnostics diagnostics;
@@ -20,6 +25,7 @@ public class CityGen : MonoBehaviour
 
     private void Awake()
     {
+        LaneWidth = SidewalkWidth + CarLaneWidth;
         lineGen = GetComponent<StreetLineGen>();
         lineExpander = GetComponent<StreetLineExpander>();
         diagnostics = GetComponent<CityGenDiagnostics>();

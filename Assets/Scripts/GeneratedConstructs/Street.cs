@@ -19,6 +19,8 @@ public class Street
     private List<Vector3> edgePointsLeft = new List<Vector3>();
     private List<Vector3> edgePointsRight = new List<Vector3>();
 
+    private float sidewalkHeight = 0.15f;
+
     public bool AllCornersValid
     {
         get
@@ -178,10 +180,9 @@ public class Street
         return null;
     }
 
-    public Mesh BuildMesh()
+    public Mesh BuildCarLanesMesh()
     {
         if (!AllCornersValid) { return null; }
-        Mesh m = new Mesh();
         List<Vector3> verts = new List<Vector3>();
         List<int> tris = new List<int>();
         verts.Add(edgePointsLeft[0]);
@@ -215,12 +216,60 @@ public class Street
             tris.Add(verts.Count - 2);
             tris.Add(verts.Count - 1);
         }
-        m.vertices = verts.ToArray();
-        m.triangles = tris.ToArray();
-        m.RecalculateNormals();
-        m.RecalculateBounds();
-        m.RecalculateTangents();
-        return m;
+        return ExtMesh.BuildMesh(verts, tris);
+    }
+
+    public Mesh BuildSidewalkMeshLeft() => BuildSidewalkMesh(true);
+    public Mesh BuildSidewalkMeshRight() => BuildSidewalkMesh(false);
+
+    private Mesh BuildSidewalkMesh(bool left)
+    {
+        List<Vector3> edgePoints = (left) ? edgePointsLeft : edgePointsRight;
+        Vector3 dirToInner = ((left) ? -Vector2.Perpendicular(Line.Dir) : Vector2.Perpendicular(Line.Dir)).ShiftToV3();
+        dirToInner = dirToInner * Line.VirtualSidewalkWidth;
+        Vector3 yOffset = Vector3.up * sidewalkHeight;
+        List<Vector3> verts = new List<Vector3>(edgePoints.Count * 6);
+        List<int> tris = new List<int>();
+        for (int i = 0; i < edgePoints.Count; i++)
+        {
+            verts.Add(edgePoints[i] - yOffset);
+            //adding these 2 twice is intentional:
+            verts.Add(edgePoints[i] + yOffset);
+            verts.Add(edgePoints[i] + yOffset);
+            verts.Add(edgePoints[i] + yOffset + dirToInner);
+            verts.Add(edgePoints[i] + yOffset + dirToInner);
+
+            verts.Add(edgePoints[i] - yOffset + dirToInner);
+
+            if (i > 0)
+            {
+                int n = 6 * (i - 1);
+                tris.Add(n);
+                tris.Add(n + 1);
+                tris.Add(n + 6);
+
+                tris.Add(n + 1);
+                tris.Add(n + 6);
+                tris.Add(n + 7);
+
+                tris.Add(n + 2);
+                tris.Add(n + 3);
+                tris.Add(n + 8);
+
+                tris.Add(n + 3);
+                tris.Add(n + 8);
+                tris.Add(n + 9);
+
+                tris.Add(n + 5);
+                tris.Add(n + 11);
+                tris.Add(n + 4);
+
+                tris.Add(n + 11);
+                tris.Add(n + 10);
+                tris.Add(n + 4);
+            }
+        }
+        return ExtMesh.BuildMesh(verts, tris);
     }
 
     public void DebugDraw(float time)
@@ -229,8 +278,6 @@ public class Street
         {
             Debug.DrawLine(CornerAL, CornerBL, Color.white, time);
             Debug.DrawLine(CornerAR, CornerBR, Color.white, time);
-            //Debug.DrawLine(CornerBR, CornerBL, Color.white, time);
-            //Debug.DrawLine(CornerAR, CornerAL, Color.white, time);
         }
     }
 }

@@ -17,6 +17,8 @@ public class StreetLine
     public Vector2 B { get { return (BOnRim) ? rimB : InterPointB.Position; } }
 
     public float VirtualWidth { get; private set; } = float.NaN;
+    public float VirtualSidewalkWidth { get; private set; } = float.NaN;
+    public float VirtualCarLaneWidth { get; private set; } = float.NaN;
     public float Length { get; private set; }
     public Vector2 Dir { get; private set; }
 
@@ -71,10 +73,12 @@ public class StreetLine
         return ((InterPointA != null && InterPointA.Position == point) || (InterPointB != null && InterPointB.Position == point));
     }
 
-    public void SetVirtualWidth(float width)
+    public void SetVirtualWidth(float carLaneWidth, float sidewalkWidth, int nOfLanes)
     {
         //DB.Log($"setting VirtualWidth to {width} for line A: {A} to B: {B} with length: {Length}");
-        VirtualWidth = width;
+        VirtualWidth = nOfLanes * (carLaneWidth + sidewalkWidth);
+        VirtualSidewalkWidth = sidewalkWidth;
+        VirtualCarLaneWidth = carLaneWidth;
     }
 
     public void AddCornerIfAbsent(Vector2 corner)
