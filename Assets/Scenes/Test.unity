@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.04210089, g: 0.049142376, b: 0.068278186, a: 1}
+  m_IndirectSpecularColor: {r: 0.04563289, g: 0.044774655, b: 0.060899924, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -552,6 +552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9a77bca0fa25dc4ca69b7bbd498a6ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sidewalkHeight: 0.3
 --- !u!114 &1856975220
 MonoBehaviour:
   m_ObjectHideFlags: 0

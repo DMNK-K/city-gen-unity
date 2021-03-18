@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7572249289379857605}
   - component: {fileID: 8826303261615064016}
   m_Layer: 11
-  m_Name: StreetPrefab
+  m_Name: SidewalkPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,7 +51,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8b05bfdb0e1c548499d77dcb6190e274, type: 2}
+  - {fileID: 2100000, guid: 7280b272aa880ea47bd13a735c188543, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -19,7 +19,7 @@ public class Street
     private List<Vector3> edgePointsLeft = new List<Vector3>();
     private List<Vector3> edgePointsRight = new List<Vector3>();
 
-    private float sidewalkHeight = 0.15f;
+    private float sidewalkHeight;
 
     public bool AllCornersValid
     {
@@ -27,10 +27,11 @@ public class Street
         { return CornerAL != Vector3.positiveInfinity && CornerBL != Vector3.positiveInfinity && CornerAR != Vector3.positiveInfinity && CornerBR != Vector3.positiveInfinity; }
     }
 
-    public Street(StreetLine line, ElevationGen elevGen)
+    public Street(StreetLine line, ElevationGen elevGen, float sidewalkHeight)
     {
         if (line == null) { DB.Error("Trying to create Street from null StreetLine."); }
         Line = line;
+        this.sidewalkHeight = sidewalkHeight;
         Line.SetCorrespondingStreet(this);
         Width = line.VirtualWidth;
         Vector2 offset = Vector2.Perpendicular(Line.Dir) * Width * 0.5f;
@@ -44,19 +45,19 @@ public class Street
         else
         {
             InterA = Line.InterPointA.CorrespondingIntersection;
-            foreach (Vector3 corner3D in InterA.Corners)
+            foreach (IntersectionCorner corner3D in InterA.Corners)
             {
                 foreach (Vector2 corner in Line.corners)
                 {
-                    if (corner.Similar(corner3D.UnShiftToV2()))
+                    if (corner.Similar(corner3D.Position.UnShiftToV2()))
                     {
                         if (GeoMath.PointIsOnLeftOfLine(corner, Line.A, Line.B))
                         {
-                            CornerAL = corner3D;
+                            CornerAL = corner3D.Position;
                         }
                         else
                         {
-                            CornerAR = corner3D;
+                            CornerAR = corner3D.Position;
                         }
                     }
                 }
@@ -73,19 +74,19 @@ public class Street
         else
         {
             InterB = Line.InterPointB.CorrespondingIntersection;
-            foreach (Vector3 corner3D in InterB.Corners)
+            foreach (IntersectionCorner corner3D in InterB.Corners)
             {
                 foreach (Vector2 corner in Line.corners)
                 {
-                    if (corner.Similar(corner3D.UnShiftToV2()))
+                    if (corner.Similar(corner3D.Position.UnShiftToV2()))
                     {
                         if (GeoMath.PointIsOnLeftOfLine(corner, Line.A, Line.B))
                         {
-                            CornerBL = corner3D;
+                            CornerBL = corner3D.Position;
                         }
                         else
                         {
-                            CornerBR = corner3D;
+                            CornerBR = corner3D.Position;
                         }
                     }
                 }
@@ -232,21 +233,23 @@ public class Street
         List<int> tris = new List<int>();
         for (int i = 0; i < edgePoints.Count; i++)
         {
-            verts.Add(edgePoints[i] - yOffset);
-            //adding these 2 twice is intentional:
-            verts.Add(edgePoints[i] + yOffset);
-            verts.Add(edgePoints[i] + yOffset);
-            verts.Add(edgePoints[i] + yOffset + dirToInner);
-            verts.Add(edgePoints[i] + yOffset + dirToInner);
+            //polar and conditionals for these is important for winding order of tris later, so they stay clockwise
+            verts.Add(edgePoints[i] - yOffset * GS.GetPolar(left));
+            verts.Add(edgePoints[i] + yOffset * GS.GetPolar(left));
 
-            verts.Add(edgePoints[i] - yOffset + dirToInner);
+            //also the top side of the sidewalk has identical, but separate verts to the sides, so the duplication is intentional
+            verts.Add(edgePoints[i] + yOffset + ((left) ? dirToInner : Vector3.zero));
+            verts.Add(edgePoints[i] + yOffset + ((left) ? Vector3.zero : dirToInner));
+
+            verts.Add(edgePoints[i] + yOffset * GS.GetPolar(left) + dirToInner);
+            verts.Add(edgePoints[i] - yOffset * GS.GetPolar(left) + dirToInner);
 
             if (i > 0)
             {
                 int n = 6 * (i - 1);
                 tris.Add(n);
-                tris.Add(n + 1);
                 tris.Add(n + 6);
+                tris.Add(n + 1);
 
                 tris.Add(n + 1);
                 tris.Add(n + 6);
@@ -257,16 +260,16 @@ public class Street
                 tris.Add(n + 8);
 
                 tris.Add(n + 3);
-                tris.Add(n + 8);
                 tris.Add(n + 9);
+                tris.Add(n + 8);
 
                 tris.Add(n + 5);
-                tris.Add(n + 11);
-                tris.Add(n + 4);
-
-                tris.Add(n + 11);
                 tris.Add(n + 10);
+                tris.Add(n + 11);
+
+                tris.Add(n + 5);
                 tris.Add(n + 4);
+                tris.Add(n + 10);
             }
         }
         return ExtMesh.BuildMesh(verts, tris);

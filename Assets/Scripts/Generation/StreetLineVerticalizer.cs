@@ -6,6 +6,9 @@ public class StreetLineVerticalizer : MonoBehaviour
 {
     private ElevationGen elevationGen;
 
+    [SerializeField]
+    private float sidewalkHeight = 0.2f;
+
     private void Awake()
     {
         elevationGen = GetComponent<ElevationGen>();
@@ -20,7 +23,7 @@ public class StreetLineVerticalizer : MonoBehaviour
         List<Intersection> inters = new List<Intersection>(points.Count);
         for (int i = 0; i < points.Count; i++)
         {
-            inters.Add(new Intersection(points[i], elevationGen.GetFullElevation(points[i].Position)));
+            inters.Add(new Intersection(points[i], elevationGen.GetFullElevation(points[i].Position), sidewalkHeight));
         }
         return inters;
     }
@@ -43,7 +46,7 @@ public class StreetLineVerticalizer : MonoBehaviour
         List<Street> streets = new List<Street>(lines.Count);
         for (int i = 0; i < lines.Count; i++)
         {
-            streets.Add(new Street(lines[i], elevationGen));
+            streets.Add(new Street(lines[i], elevationGen, sidewalkHeight));
         }
         return streets;
     }

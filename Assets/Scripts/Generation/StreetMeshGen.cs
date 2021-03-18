@@ -16,9 +16,16 @@ public class StreetMeshGen : MonoBehaviour
         if (prefabIntersection == null) { yield break; }
         for (int i = 0; i < inters.Count; i++)
         {
-            Mesh mesh = inters[i].BuildMesh();
+            Mesh mesh = inters[i].BuildCarLaneMesh();
             string name = "Intersection" + inters[i].Position.x + "_" + inters[i].Position.z;
             InstantiateMesh(mesh, prefabIntersection, inters[i].Position, Quaternion.identity, name);
+
+            List<Mesh> sidewalkMeshes = inters[i].BuildSidewalkMeshes();
+            for (int o = 0; o < sidewalkMeshes.Count; o++)
+            {
+                name = $"Corner{o}";
+                InstantiateMesh(sidewalkMeshes[o], prefabSidewalk, inters[i].Position, Quaternion.identity, name);
+            }
             yield return null;
         }
     }
