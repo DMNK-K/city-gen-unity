@@ -48,8 +48,10 @@ public class IntersectionCorner
         }
     }
 
-    //public Vector3 GetSidewalkOffset(int i)
-    //{
-    //    //return Conne
-    //}
+    public Vector3 GetSidewalkOffset(int i)
+    {
+        float length = ConnectedTo[i].Line.VirtualSidewalkWidth;
+        Vector2 dir = ConnectedTo[i].Line.Dir;
+        return length * ((ConnectedOnLeft[i]) ? -Vector2.Perpendicular(dir).ShiftToV3() : Vector2.Perpendicular(dir).ShiftToV3());
+    }
 }

@@ -79,10 +79,49 @@ public class Intersection
             }
             else if (Corners[i].ConnectedTo.Count == 2)
             {
-                //Vector3 offset0 = Corners[i].ConnectedTo[0].;
-                //Vector3 offset1;
-                //verts.Add(Corners[i].Position);
-                //verts.Add(Corner Corners[i].ConnectedTo[0])
+                Vector3 offset0 = Corners[i].GetSidewalkOffset(0);
+                Vector3 offset1 = Corners[i].GetSidewalkOffset(0);
+                Vector3 yOffset = sidewalkHeight * Vector3.up;
+                //top face
+                verts.Add(Corners[i].Position - Position + yOffset);
+                verts.Add(Corners[i].Position + offset0 - Position + yOffset);
+                verts.Add(Corners[i].Position + offset1 - Position + yOffset);
+                verts.Add(Corners[i].Position + offset0 + offset1 - Position + yOffset);
+
+                tris.Add(0);
+                tris.Add(3);
+                tris.Add(1);
+
+                tris.Add(0);
+                tris.Add(2);
+                tris.Add(3);
+
+                //side faces
+                verts.Add(Corners[i].Position + offset0 - Position + yOffset);
+                verts.Add(Corners[i].Position + offset0 - Position - yOffset);
+                verts.Add(Corners[i].Position + offset0 + offset1 - Position + yOffset);
+                verts.Add(Corners[i].Position + offset0 + offset1 - Position - yOffset);
+
+                tris.Add(5);
+                tris.Add(4);
+                tris.Add(6);
+
+                tris.Add(5);
+                tris.Add(7);
+                tris.Add(4);
+
+                verts.Add(Corners[i].Position + offset1 - Position + yOffset);
+                verts.Add(Corners[i].Position + offset1 - Position - yOffset);
+                verts.Add(Corners[i].Position + offset0 + offset1 - Position + yOffset);
+                verts.Add(Corners[i].Position + offset0 + offset1 - Position - yOffset);
+
+                tris.Add(9);
+                tris.Add(8);
+                tris.Add(10);
+
+                tris.Add(9);
+                tris.Add(11);
+                tris.Add(8);
             }
             else
             {
