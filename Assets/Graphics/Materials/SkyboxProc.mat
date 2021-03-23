@@ -7,9 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Skybox
-  m_Shader: {fileID: 106, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: _SUNDISK_NONE
+  m_Name: SkyboxProc
+  m_Shader: {fileID: -6465566751694194690, guid: 03609392090e87b4d9c08fef90de5f13, type: 3}
+  m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -76,8 +76,12 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Vector1_1151516a8dcc4194b030bf52f45bdf3b: 20
+    - Vector1_1b7a613089ce4e3dbb02ff158af75468: 0.5
+    - Vector1_aa298260da1c4de9ae6df7cd45ef2a91: 0.39
+    - Vector1_c5d7789d8c464a22948d3bf4a2173fe6: 1
+    - Vector1_fb4e0a397c034f3092f556925e00976f: 12
     - _AlphaClip: 0
-    - _AtmosphereThickness: 1
     - _Blend: 0
     - _BumpScale: 1
     - _ClearCoatMask: 0
@@ -88,7 +92,6 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _EnvironmentReflections: 1
-    - _Exposure: 0.04
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -101,21 +104,20 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _SunDisk: 0
-    - _SunSize: 0
-    - _SunSizeConvergence: 3.48
     - _Surface: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
+    - Color_1704f1b46bbb4cfca7e827c32f6158a2: {r: 0.19215687, g: 0.3019608, b: 0.36862746, a: 1}
+    - Color_40b148a6dfd440e4a9ac4f27cfe1e092: {r: 0.23535958, g: 0.35501587, b: 0.38679248, a: 1}
+    - Color_4217dc5c1b7d46939b3046ac9e9eb325: {r: 0.509434, g: 0.4353442, b: 0.3340157, a: 1}
+    - Color_e74b45797c8e441fb03d053c9f534484: {r: 0.79716986, g: 0.9312976, b: 1, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _GroundColor: {r: 0.3962264, g: 0.3018107, b: 0.27847987, a: 1}
-    - _SkyTint: {r: 0.3018868, g: 0.3018868, b: 0.3018868, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &8570903541518533358
+--- !u!114 &6180122078432713389
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

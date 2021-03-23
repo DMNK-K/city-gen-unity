@@ -7,10 +7,10 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Skybox
-  m_Shader: {fileID: 106, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: _SUNDISK_NONE
-  m_LightmapFlags: 4
+  m_Name: AdNeon
+  m_Shader: {fileID: -6465566751694194690, guid: 34173886c3132764395a423b4d352305, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -19,6 +19,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Texture2D_b1b3e792191f4365ab7b6e0a15da5765:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -76,8 +80,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Vector1_004b572530dc4044a4fe2ac761aeafdf: 2
+    - Vector1_1cfb8ed941d5451c90febbbe3d30e120: 30
+    - Vector1_31ea836b505640dfb606c0b615719eb5: 0.1
+    - Vector1_3497c7d23b194998be3488d2295c7ba4: 0.04
+    - Vector1_59c6b9931af844d6b31b502a22c1be3c: 0.2
+    - Vector1_8bfbf5e4bae548e7b1b25490db18ddb8: 0
+    - Vector1_f31992ec41d748d8818cdc6adf293c95: 1.07
+    - Vector1_ff0d94b3fc9c42329e1783de3965a8c0: 0.66
     - _AlphaClip: 0
-    - _AtmosphereThickness: 1
     - _Blend: 0
     - _BumpScale: 1
     - _ClearCoatMask: 0
@@ -88,7 +99,6 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _EnvironmentReflections: 1
-    - _Exposure: 0.04
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -101,21 +111,18 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _SunDisk: 0
-    - _SunSize: 0
-    - _SunSizeConvergence: 3.48
     - _Surface: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
+    - Color_c0bfd4ea78c9495294e8e43b9f0014b7: {r: 0, g: 1, b: 0.23137255, a: 1}
+    - Vector2_7bc7299027534b38acf63489ebae6229: {r: 0, g: 0.2, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _GroundColor: {r: 0.3962264, g: 0.3018107, b: 0.27847987, a: 1}
-    - _SkyTint: {r: 0.3018868, g: 0.3018868, b: 0.3018868, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &8570903541518533358
+--- !u!114 &3612253055955356393
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
