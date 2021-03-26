@@ -10,6 +10,9 @@ public class CityBlock
     public Vector3 Center3D { get; private set; }
     public Vector2 Center { get { return Center3D.UnShiftToV2(); } }
     private List<Vector3> corners;
+    public float Area { get; private set; }
+    public float DistFromOrigin { get; private set; }
+    public CityBlockPurpose Purpose { get; private set; }
 
     public CityBlock(List<StreetTraversal> traversedBounds, bool hasRimSkip)
     {
@@ -25,11 +28,13 @@ public class CityBlock
         //we only add the first corner from any street in order of traversal
         //since they repeat between one street and the next, except for
         //the situation when there is a rim skip
+        List<Vector2> vertsForArea = new List<Vector2>();
         for (int i = 0; i < traversedBounds.Count; i++)
         {
             Bounds.Add(traversedBounds[i].Street);
             Vector3 corner = (traversedBounds[i].FromAToB) ? traversedBounds[i].Street.CornerAR : traversedBounds[i].Street.CornerBL;
             sum += corner;
+            vertsForArea.Add(corner.UnShiftToV2());
             corners.Add(corner);
             bool rimSkipAhead = (traversedBounds[i].FromAToB) ? traversedBounds[i].Street.Line.BOnRim : traversedBounds[i].Street.Line.AOnRim;
             if (rimSkipAhead)
@@ -40,6 +45,13 @@ public class CityBlock
             }
         }
         Center3D = sum / corners.Count;
+        DistFromOrigin = Vector2.Distance(Vector2.zero, Center);
+        Area = GeoMath.AreaOfPolygon(vertsForArea);
+    }
+
+    public void SetPurpose(CityBlockPurpose purpose)
+    {
+        Purpose = purpose;
     }
 
     public Mesh BuildMesh()
@@ -79,3 +91,11 @@ public class CityBlock
         }
     }
 }
+
+public enum CityBlockPurpose
+{
+    Buildings,
+    Plaza,
+    Park,
+}
+

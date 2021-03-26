@@ -51,8 +51,16 @@ public static class GeoMath
         return ((b.x - a.x) * (point.y - a.y) - (b.y - a.y) * (point.x - a.x)) > 0;
     }
 
-    //public float QuadArea(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
-    //{
-    //    return 0.5f * d1 * d2 * sinalpha
-    //}
+    public static float AreaOfPolygon(List<Vector2> orderedVertices)
+    {
+        if (orderedVertices == null || orderedVertices.Count < 3) { return 0; }
+        float area = 0;
+        int shoelaceVal = orderedVertices.Count - 1;
+        for (int i = 0; i < orderedVertices.Count; i++)
+        {
+            area += (orderedVertices[shoelaceVal].x + orderedVertices[i].x) * (orderedVertices[shoelaceVal].y - orderedVertices[i].y);
+            shoelaceVal = i;
+        }
+        return Mathf.Abs(area * 0.5f);
+    }
 }

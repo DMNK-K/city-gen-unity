@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.057851676, g: 0.05089931, b: 0.03987223, a: 1}
+  m_IndirectSpecularColor: {r: 0.020547997, g: 0.01824127, b: 0.014726285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -204,6 +204,80 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 107197007}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &160415009
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 160415010}
+  - component: {fileID: 160415013}
+  - component: {fileID: 160415012}
+  - component: {fileID: 160415011}
+  m_Layer: 0
+  m_Name: CityBlockContentGens
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &160415010
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160415009}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1856975215}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &160415011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160415009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54e82a59a6d64f746a434e74a4a592ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowedPlacementMethods: 
+  boxFitBias: 1
+  shapeFitBias: 0
+  ringFillBias: 0
+  singleBuildingBias: 0
+--- !u!114 &160415012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160415009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85a6a13f39ba377478270c9b72fe8ff7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &160415013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160415009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6886aa5357863bc46b44a10b92747eef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &177280647
 GameObject:
   m_ObjectHideFlags: 0
@@ -2353,6 +2427,7 @@ GameObject:
   - component: {fileID: 1856975219}
   - component: {fileID: 1856975220}
   - component: {fileID: 1856975221}
+  - component: {fileID: 1856975222}
   m_Layer: 0
   m_Name: GenManager
   m_TagString: Untagged
@@ -2405,7 +2480,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 160415010}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2505,6 +2581,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabCityBlock: {fileID: 6139283985742651121, guid: cd85be52c23a5c949b72204c23163989, type: 3}
+--- !u!114 &1856975222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1856975212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f833b2e09802be46a1cb1ecfdc5405a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingBias: 1
+  parkBias: 0.15
+  plazaBias: 0.1
+  parkRadiusFractionMin: 0.15
+  parkRadiusFractionMax: 0.7
+  plazaAreaSizeLimit: 300
 --- !u!1 &1963264577
 GameObject:
   m_ObjectHideFlags: 0
