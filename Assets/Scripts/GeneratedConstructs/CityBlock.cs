@@ -13,6 +13,8 @@ public class CityBlock
     public float Area { get; private set; }
     public float DistFromOrigin { get; private set; }
     public CityBlockPurpose Purpose { get; private set; }
+    private List<Triangle2> concentricTris;
+    private List<float> concentricTrisAreas; //used as a bias for picking triangles for random points on city block
 
     public CityBlock(List<StreetTraversal> traversedBounds, bool hasRimSkip)
     {
@@ -47,6 +49,17 @@ public class CityBlock
         Center3D = sum / corners.Count;
         DistFromOrigin = Vector2.Distance(Vector2.zero, Center);
         Area = GeoMath.AreaOfPolygon(vertsForArea);
+        for (int i = 1; i <= corners.Count; i++)
+        {
+            concentricTris.Add(new Triangle2(corners[i - 1].UnShiftToV2(), corners[GS.TrueMod(i, corners.Count)].UnShiftToV2(), Center));
+            concentricTrisAreas.Add(concentricTris.Last().Area);
+        }
+    }
+
+    public Vector3 GetRandomPoint()
+    {
+        Triangle2 tri = concentricTris.RandomElementWithBias(concentricTrisAreas);
+        return tri.RandomPointInside().ShiftToV3().SwapY(Center3D.y);
     }
 
     public void SetPurpose(CityBlockPurpose purpose)

@@ -8,7 +8,7 @@ using UnityEngine;
 /// It decides what kind of contents will be generated and gives the task to a class that specializes in that specific type of content.
 /// </para>
 /// </summary>
-public class CityBlockContentGenHandler : MonoBehaviour
+public class CityBlockPurposeDeterminer : MonoBehaviour
 {
     [Header("Relative probabilities of assigning one of these purpuses for a CityBlock")]
     [SerializeField]
@@ -28,7 +28,7 @@ public class CityBlockContentGenHandler : MonoBehaviour
     private float plazaAreaSizeLimit = 300f;
 
     private CityGen cityGen;
-    private Dictionary<CityBlockPurpose, CityBlockContentGen> contentGenerators;
+    
     private float parkDistMin;
     private float parkDistMax;
 
@@ -41,28 +41,12 @@ public class CityBlockContentGenHandler : MonoBehaviour
     {
         cityGen = GetComponent<CityGen>();
         parkDistMin = cityGen.RimRadius * parkRadiusFractionMin;
-        parkDistMax = cityGen.RimRadius * parkRadiusFractionMax;
-        contentGenerators.Add(CityBlockPurpose.Park, GetComponentInChildren<ParkGen>());
-        contentGenerators.Add(CityBlockPurpose.Plaza, GetComponentInChildren<PlazaGen>());
-        contentGenerators.Add(CityBlockPurpose.Buildings, GetComponentInChildren<BuildingsGen>());
+        parkDistMax = cityGen.RimRadius * parkRadiusFractionMax;    
     }
 
-    public IEnumerator GenerateContentForBlocks(List<CityBlock> blocks)
+    public void DeterminePurposeOfCityBlocks(List<CityBlock> blocks)
     {
-        DB.Log("GENERATING CONTENTS OF CITY BLOCKS", 1);
-        DeterminePurposeOfCityBlocks(blocks);
-        for (int i = 0; i < blocks.Count; i++)
-        {
-            CityBlockContentGen gen = contentGenerators[blocks[i].Purpose];
-            if (gen != null)
-            {
-                yield return StartCoroutine(gen.Generate(blocks[i]));
-            }
-        }
-    }
-
-    void DeterminePurposeOfCityBlocks(List<CityBlock> blocks)
-    {
+        DB.Log("DETERMINING PURPOSE OF CITY BLOCKS", 1);
         List<float> biases = new List<float>() { buildingBias, 1, 1};
         for (int i = 0; i < blocks.Count; i++)
         {

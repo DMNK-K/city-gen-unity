@@ -26,7 +26,8 @@ public class CityGen : MonoBehaviour
     private StreetLineVerticalizer lineVerticalizer;
     private StreetMeshGen streetMeshGen;
     private CityBlockGen cityBlockGen;
-    private CityBlockContentGenHandler cityBlockContentGen;
+    private CityBlockPurposeDeterminer cityBlockPurposeDeterminer;
+    private Dictionary<CityBlockPurpose, CityBlockContentGen> cityBlockContentGenerators;
 
     private void Awake()
     {
@@ -37,7 +38,10 @@ public class CityGen : MonoBehaviour
         lineVerticalizer = GetComponent<StreetLineVerticalizer>();
         streetMeshGen = GetComponent<StreetMeshGen>();
         cityBlockGen = GetComponent<CityBlockGen>();
-        cityBlockContentGen = GetComponent<CityBlockContentGenHandler>();
+        cityBlockPurposeDeterminer = GetComponent<CityBlockPurposeDeterminer>();
+        cityBlockContentGenerators.Add(CityBlockPurpose.Park, GetComponentInChildren<ParkGen>());
+        cityBlockContentGenerators.Add(CityBlockPurpose.Plaza, GetComponentInChildren<PlazaGen>());
+        cityBlockContentGenerators.Add(CityBlockPurpose.Buildings, GetComponentInChildren<BuildingsGen>());
     }
 
     void Start()
@@ -83,7 +87,15 @@ public class CityGen : MonoBehaviour
         yield return StartCoroutine(cityBlockGen.ExtractCityBlocks(intersections, streetLinesOnRim));
         yield return StartCoroutine(cityBlockGen.GenerateCityBlockTerrainMeshes());
         List<CityBlock> blocks = cityBlockGen.Blocks;
-        yield return StartCoroutine(cityBlockContentGen.GenerateContentForBlocks(blocks));
+        cityBlockPurposeDeterminer.DeterminePurposeOfCityBlocks(blocks);
+        for (int i = 0; i < blocks.Count; i++)
+        {
+            if (cityBlockContentGenerators.ContainsKey(blocks[i].Purpose))
+            {
+                yield return StartCoroutine(cityBlockContentGenerators[blocks[i].Purpose].Generate(blocks[i]));
+            }
+        }
+
         FinalizeGeneration();
     }
 
