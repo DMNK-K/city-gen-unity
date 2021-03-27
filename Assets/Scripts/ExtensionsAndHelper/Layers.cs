@@ -16,6 +16,7 @@ public class Layers
         {Layer.RimSphere, (1 << (int)Layer.RimSphere)},
         {Layer.Street, (1 << (int)Layer.Street)},
         {Layer.CityBlockTerrain, (1 << (int)Layer.CityBlockTerrain)},
+        {Layer.Building, (1 << (int)Layer.Building) },
     };
 
     public static LayerMask GetMask(Layer layer)
@@ -37,4 +38,5 @@ public enum Layer
     RimSphere = 10,
     Street = 11,
     CityBlockTerrain = 12,
+    Building = 13,
 }

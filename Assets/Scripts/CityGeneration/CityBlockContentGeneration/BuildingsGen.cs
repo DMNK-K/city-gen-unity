@@ -8,8 +8,9 @@ using UnityEngine;
 public class BuildingsGen : CityBlockContentGen
 {
     [SerializeField]
+    private float maxHeight = 200f;
+    [SerializeField]
     private List<BuildingPlacementMethod> allowedPlacementMethods;
-
     [SerializeField]
     private float boxFitBias = 1;
     [SerializeField]
@@ -18,9 +19,13 @@ public class BuildingsGen : CityBlockContentGen
     private float ringFillBias = 1;
     [SerializeField]
     private float singleBuildingBias = 0.5f;
+    [SerializeField]
+    private List<BuildingVariant> buildingVariants;
 
     private List<float> biases = new List<float>();
     private Dictionary<BuildingPlacementMethod, BuildingPlacer> placers;
+
+    public float MaxHeight { get { return maxHeight; } }
 
     private void Awake()
     {
@@ -63,7 +68,7 @@ public class BuildingsGen : CityBlockContentGen
             DB.Log("None allowed placement methods, reverting to BoxFit as default.");
         }
         BuildingPlacementMethod method = allowedPlacementMethods.RandomElementWithBias(biases);
-        yield return StartCoroutine(placers[method].PlaceBuildings(block));
+        yield return StartCoroutine(placers[method].PlaceBuildings(block, buildingVariants));
     }
 }
 
