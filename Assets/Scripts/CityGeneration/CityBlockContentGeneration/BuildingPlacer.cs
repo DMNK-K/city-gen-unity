@@ -5,7 +5,10 @@ using UnityEngine;
 public class BuildingPlacer : MonoBehaviour
 {
     CityGen cityGen;
-    BuildingsGen buildingsGen;
+    protected BuildingsGen buildingsGen;
+    protected CityBlock block;
+    protected List<BuildingVariant> variants;
+    public List<Building> Placed { get; protected set; }
 
     private void Awake()
     {
@@ -25,7 +28,7 @@ public class BuildingPlacer : MonoBehaviour
         return 1 / (Mathf.Pow(distFrac, 2.2f) * 4 + 1) * buildingsGen.MaxHeight;
     }
 
-    protected List<BuildingVariant> FilterVariantsBasedOnAllowedHeight(CityBlock block, List<BuildingVariant> variants)
+    protected void FilterVariantsBasedOnAllowedHeight()
     {
         //absolutely min and max heights for any building for block
         float blockHeightMin = GetHeightMin(block.GetPointFurthestFromCityCenter());
@@ -33,16 +36,29 @@ public class BuildingPlacer : MonoBehaviour
         List<BuildingVariant> allowed = new List<BuildingVariant>();
         for (int i = 0; i < variants.Count; i++)
         {
-            if (variants[i].StoriesMin * variants[i].StoryHeight < blockHeightMax && variants[i].StoriesMax * variants[i].StoryHeight > blockHeightMin)
+            if (variants[i].HeightMin < blockHeightMax && variants[i].HeightMax > blockHeightMin)
             {
                 allowed.Add(variants[i]);
             }
         }
-        return allowed;
+        variants = allowed;
     }
 
     public virtual IEnumerator PlaceBuildings(CityBlock block, List<BuildingVariant> variants)
     {
         yield return null;
     }
+
+    protected void DestroyPlaced()
+    {
+        if (Placed != null)
+        {
+            for (int i = 0; i < Placed.Count; i++)
+            {
+                Destroy(Placed[i].gameObject);
+            }
+            Placed.Clear();
+        }
+    }
+
 }

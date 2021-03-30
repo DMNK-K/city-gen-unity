@@ -6,11 +6,24 @@ using UnityEngine;
 /// </summary>
 public class GS : MonoBehaviour
 {
-    public static LayerMask MaskRimSphere = (1 << 10);
-
     public static int GetPolar(bool boolean)
     {
         return (boolean) ? 1 : -1;
+    }
+
+    public static float RoundTo(float n, float multiple)
+    {
+        return Mathf.Round(n / multiple) * multiple;
+    }
+
+    public static float FloorTo(float n, float multiple)
+    {
+        return Mathf.Floor(n / multiple) * multiple;
+    }
+
+    public static float CeilTo(float n, float multiple)
+    {
+        return Mathf.Ceil(n / multiple) * multiple;
     }
 
     public static List<Vector2> CardinalDirs = new List<Vector2>() { Vector2.up, Vector2.right, Vector2.down, Vector2.left };

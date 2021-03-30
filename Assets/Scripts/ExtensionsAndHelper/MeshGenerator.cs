@@ -83,4 +83,9 @@ public static class MeshGenerator
     {
         return GenerateBoxUpwards(center - Vector3.up * halfExtents.y, halfExtents * 2);
     }
+
+    public static Mesh GenerateBox(Vector3 halfExtents)
+    {
+        return GenerateBox(Vector3.zero, halfExtents);
+    }
 }

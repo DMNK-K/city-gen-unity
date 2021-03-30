@@ -34,7 +34,9 @@ public class StreetLineGen : MonoBehaviour
     private int absoluteMaxStreetCount;
     private int desiredStreetCount;
     private int maxTriesPerLine = 100;
+    private LayerMask maskRimSphere;
     private CityGen cityGen;
+
     List<Vector2> diags = new List<Vector2>()
     {
         new Vector2(1, 2), new Vector2(3, 4), new Vector2(4, 3), new Vector2(2, 1),
@@ -72,6 +74,7 @@ public class StreetLineGen : MonoBehaviour
         {
             diags[i] = diags[i].normalized;
         }
+        maskRimSphere = Layers.GetMask(Layer.RimSphere);
     }
 
     public IEnumerator GenStreetLines()
@@ -106,7 +109,7 @@ public class StreetLineGen : MonoBehaviour
             RaycastHit hit;
             Ray ray = new Ray(start.ShiftToV3() + dir.ShiftToV3() * rayRange, -dir.ShiftToV3());
             //this raycast has to be reversed because they dont work from within colliders
-            if (!Physics.Raycast(ray, out hit, rayRange, GS.MaskRimSphere, QueryTriggerInteraction.Collide))
+            if (!Physics.Raycast(ray, out hit, rayRange, maskRimSphere, QueryTriggerInteraction.Collide))
             {
                 continue; //this should never happen, the raycast is set up to always hit
             }
