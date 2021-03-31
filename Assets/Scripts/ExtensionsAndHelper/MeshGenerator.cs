@@ -11,10 +11,10 @@ public static class MeshGenerator
         //C----D   |
         //|    |   V Z+ direction
         //A----B
-        Vector3 botA = new Vector3(bottomCenter.x - dimentions.x * 0.5f, 0, bottomCenter.z + dimentions.z * 0.5f);
-        Vector3 botB = new Vector3(bottomCenter.x + dimentions.x * 0.5f, 0, bottomCenter.z + dimentions.z * 0.5f);
-        Vector3 botC = new Vector3(bottomCenter.x - dimentions.x * 0.5f, 0, bottomCenter.z - dimentions.z * 0.5f);
-        Vector3 botD = new Vector3(bottomCenter.x + dimentions.x * 0.5f, 0, bottomCenter.z - dimentions.z * 0.5f);
+        Vector3 botA = new Vector3(bottomCenter.x - dimentions.x * 0.5f, bottomCenter.y, bottomCenter.z + dimentions.z * 0.5f);
+        Vector3 botB = new Vector3(bottomCenter.x + dimentions.x * 0.5f, bottomCenter.y, bottomCenter.z + dimentions.z * 0.5f);
+        Vector3 botC = new Vector3(bottomCenter.x - dimentions.x * 0.5f, bottomCenter.y, bottomCenter.z - dimentions.z * 0.5f);
+        Vector3 botD = new Vector3(bottomCenter.x + dimentions.x * 0.5f, bottomCenter.y, bottomCenter.z - dimentions.z * 0.5f);
 
         Vector3 topA = botA + Vector3.up * dimentions.y;
         Vector3 topB = botB + Vector3.up * dimentions.y;
@@ -43,20 +43,20 @@ public static class MeshGenerator
             0, 3, 1,
             0, 2, 3,
             //front face
-            4, 5, 6,
-            5, 7, 6,
+            6, 5, 4,
+            6, 7, 5,
             //back face
-            8, 9, 10,
-            9, 11, 10,
+            10, 9, 8,
+            10, 11, 9,
             //right face
-            12, 13, 14,
-            13, 15, 14,
+            14, 13, 12,
+            14, 15, 13,
             //left face
-            16, 17, 18,
-            17, 19, 18,
+            18, 17, 16,
+            18, 19, 17,
             //top face
-            20, 23, 21,
-            20, 22, 23
+            21, 23, 20,
+            23, 22, 20
         };
 
         Mesh m = new Mesh();

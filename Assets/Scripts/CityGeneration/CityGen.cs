@@ -27,7 +27,7 @@ public class CityGen : MonoBehaviour
     private StreetMeshGen streetMeshGen;
     private CityBlockGen cityBlockGen;
     private CityBlockPurposeDeterminer cityBlockPurposeDeterminer;
-    private Dictionary<CityBlockPurpose, CityBlockContentGen> cityBlockContentGenerators;
+    private Dictionary<CityBlockPurpose, CityBlockContentGen> cityBlockContentGenerators = new Dictionary<CityBlockPurpose, CityBlockContentGen>();
 
     private void Awake()
     {

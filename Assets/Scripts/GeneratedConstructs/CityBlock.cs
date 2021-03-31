@@ -22,6 +22,8 @@ public class CityBlock
         Bounds = new List<Street>();
         corners3D = new List<Vector3>();
         corners = new List<Vector2>();
+        concentricTris = new List<Triangle2>();
+        concentricTrisAreas = new List<float>();
         OnRim = hasRimSkip;
         Vector3 sum = Vector3.zero;
         //since the alg for finding CityBlocks runs clockwise
@@ -50,9 +52,9 @@ public class CityBlock
         Center3D = sum / corners3D.Count;
         DistFromOrigin = Vector2.Distance(Vector2.zero, Center);
         //Area = GeoMath.AreaOfPolygon(corners);
-        for (int i = 1; i <= corners.Count; i++)
+        for (int i = 0; i < corners.Count; i++)
         {
-            concentricTris.Add(new Triangle2(corners[i - 1], corners[GS.TrueMod(i, corners3D.Count)], Center));
+            concentricTris.Add(new Triangle2(corners[i], corners[(i + 1) % corners.Count], Center));
             concentricTrisAreas.Add(concentricTris.Last().Area);
         }
         Area = concentricTrisAreas.Sum();
@@ -116,6 +118,14 @@ public class CityBlock
             Debug.DrawLine(Center3D, corners3D[i], Color.green, time);
         }
     }
+
+    //public void DebugDrawTriangles(float time)
+    //{
+    //    for (int i = 0; i < concentricTris.Count; i++)
+    //    {
+    //        Debug.dr
+    //    }
+    //}
 }
 
 public enum CityBlockPurpose

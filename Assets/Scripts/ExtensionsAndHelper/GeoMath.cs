@@ -95,7 +95,7 @@ public static class GeoMath
         if (orderedVertices.Count == 1) { return orderedVertices[0]; }
         if (PointIsInPolygonByRaycasting(orderedVertices, point)) { return point; }
         float[] sqrDists = new float[orderedVertices.Count];
-        List<Vector2> closestPoints = new List<Vector2>();
+        Vector2[] closestPoints = new Vector2[orderedVertices.Count];
         for (int i = 0; i < orderedVertices.Count; i++)
         {
             closestPoints[i] = ClosestPointOnLineSegment(point, orderedVertices[i], orderedVertices[(i + 1) % orderedVertices.Count]);

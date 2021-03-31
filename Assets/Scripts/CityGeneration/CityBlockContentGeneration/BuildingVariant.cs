@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[CreateAssetMenu(fileName = "Bld", menuName = "ScriptableObjects/BuildingVariant", order = 1)]
 public class BuildingVariant : ScriptableObject
 {
     [SerializeField]
@@ -16,7 +16,7 @@ public class BuildingVariant : ScriptableObject
     [SerializeField]
     private float wallLengthMin = 10;
     [SerializeField]
-    private float wallLengthMax = 200;
+    private float wallLengthMax = 120;
 
     [Space]
     [SerializeField]

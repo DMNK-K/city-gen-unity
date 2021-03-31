@@ -7,10 +7,10 @@ public class BuildingPlacerBoxFit : BuildingPlacer
     [SerializeField]
     private float squareChance = 20f;
     private float minAreaFraction = 0.5f;
-    private int maxFindPositionFails = 100;
+    private int maxFindPositionFails = 300;
     private int maxResets = 10;
 
-    private List<Quaternion> acceptableRotations;
+    private List<Quaternion> acceptableRotations = new List<Quaternion>();
 
     public override IEnumerator PlaceBuildings(CityBlock block, List<BuildingVariant> variants)
     {
@@ -21,6 +21,7 @@ public class BuildingPlacerBoxFit : BuildingPlacer
         FilterVariantsBasedOnAllowedHeight();
         float occupiedArea = 0;
         float occupiedAreaMin = block.Area * minAreaFraction;
+        DB.Log($"block.Area: {block.Area}");
         int findPositionFailCounter = 0;
         int resetCounter = 0;
 
@@ -42,11 +43,14 @@ public class BuildingPlacerBoxFit : BuildingPlacer
             bool foundPosition = TryFindSuitablePosition(pickedVariant, rot, wallLengthX, wallLengthZ, out pos);
             if (foundPosition)
             {
+                Debug.DrawRay(pos, Vector3.up * 10f, Color.yellow, 20f);
                 PlaceVariant(pickedVariant, pos, rot, wallLengthX, wallLengthZ);
                 occupiedArea += wallLengthX * wallLengthZ;
+                yield return null;
             }
             else
             {
+                //Debug.DrawRay(pos, Vector3.up * 10f, Color.red, 10f);
                 findPositionFailCounter++;
                 if (findPositionFailCounter >= maxFindPositionFails)
                 {
@@ -58,11 +62,12 @@ public class BuildingPlacerBoxFit : BuildingPlacer
                     if (resetCounter >= maxResets)
                     {
                         resetCounter = 0;
-                        occupiedAreaMin *= 0.9f;
+                        occupiedAreaMin = (occupiedAreaMin - 1f) * 0.9f;
                     }
+                    yield return null;
                 }
             }
-            yield return null;
+            
         }
     }
 
@@ -101,40 +106,37 @@ public class BuildingPlacerBoxFit : BuildingPlacer
         Vector3 castOrigin = pos.SwapY(buildingsGen.MaxHeight);
         Vector3 halfEx = new Vector3(xWall * 0.5f, 1f, zWall * 0.5f);
         LayerMask mask = Layers.GetMask(Layer.CityBlockTerrain);
-        RaycastHit[] hits = Physics.BoxCastAll(castOrigin, halfEx, Vector3.down, rot, buildingsGen.MaxHeight * 2, mask);
+        RaycastHit hit;
         float foundationElev = pos.y;
-        float foundationBottom = pos.y;
-        for (int i = 0; i < hits.Length; i++)
+        if (Physics.BoxCast(castOrigin, halfEx, Vector3.down, out hit, rot, buildingsGen.MaxHeight * 2, mask))
         {
-            if (hits[i].point.y > foundationElev)
-            {
-                foundationElev = hits[i].point.y;
-            }
-            if (hits[i].point.y < foundationBottom)
-            {
-                foundationBottom = hits[i].point.y;
-            }
+            foundationElev = hit.point.y;
         }
         foundationElev += variant.FoundationHeight;
-        Vector3 foundationHalfEx = new Vector3(xWall, foundationElev - foundationBottom, zWall) * 0.5f;
-        Mesh foundationMesh = MeshGenerator.GenerateBox(foundationHalfEx);
+        float foundationBottom = foundationElev - 20;
+        float foundationYSpan = foundationElev - foundationBottom;
+        Vector3 foundationDimentions = new Vector3(xWall, foundationYSpan, zWall);
+        Mesh foundationMesh = MeshGenerator.GenerateBox(foundationDimentions * 0.5f);
 
-        MeshFilter instFoundation = Instantiate(variant.PrefabFoundation, pos.SwapY(0.5f * (foundationElev - foundationBottom)), rot);
+        Vector3 foundationPos = pos.SwapY(foundationElev - 0.5f * foundationYSpan);
+        MeshFilter instFoundation = Instantiate(variant.PrefabFoundation, foundationPos, rot);
         instFoundation.mesh = foundationMesh;
         BoxCollider col = instFoundation.gameObject.AddComponent<BoxCollider>();
-        col.size = foundationHalfEx * 2;
+        col.size = foundationDimentions;
 
-        int storiesMin = Mathf.Max(variant.StoriesMin, Mathf.FloorToInt(GetHeightMin(pos) / variant.StoryHeight));
-        int storiesMax = Mathf.Min(variant.StoriesMax, Mathf.CeilToInt(GetHeightMax(pos) / variant.StoryHeight));
+        Vector2 pos2D = pos.UnShiftToV2();
+        int storiesMin = Mathf.Max(variant.StoriesMin, Mathf.FloorToInt(GetHeightMin(pos2D) / variant.StoryHeight));
+        int storiesMax = Mathf.Min(variant.StoriesMax, Mathf.CeilToInt(GetHeightMax(pos2D) / variant.StoryHeight));
         float bodyHeight = Random.Range(storiesMin, storiesMax + 1) * variant.StoryHeight;
-        Vector3 bodyMeshHalfEx = new Vector3(xWall, bodyHeight, zWall) * 0.5f;
-        Mesh bodyMesh = MeshGenerator.GenerateBox(bodyMeshHalfEx);
+        Vector3 bodyDimentions = new Vector3(xWall, bodyHeight, zWall);
+        Mesh bodyMesh = MeshGenerator.GenerateBox(bodyDimentions * 0.5f);
 
-        MeshFilter instBody = Instantiate(variant.PrefabBody, pos.SwapY(foundationElev + bodyHeight * 0.5f), rot);
+        Vector3 bodyPosition = pos.SwapY(foundationElev + bodyHeight * 0.5f);
+        MeshFilter instBody = Instantiate(variant.PrefabBody, bodyPosition, rot);
         instBody.mesh = bodyMesh;
         Building newlyPlaced = instBody.gameObject.AddComponent<Building>();
         col = instBody.gameObject.AddComponent<BoxCollider>();
-        col.size = bodyMeshHalfEx * 2;
+        col.size = bodyDimentions;
 
         instFoundation.transform.parent = newlyPlaced.transform;
         Placed.Add(newlyPlaced);

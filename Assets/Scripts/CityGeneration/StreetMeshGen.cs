@@ -52,6 +52,8 @@ public class StreetMeshGen : MonoBehaviour
         MeshFilter mf = Instantiate(prefab, pos, rot);
         mf.gameObject.name = name;
         mf.mesh = mesh;
+        MeshCollider col = mf.GetComponent<MeshCollider>();
+        if (col != null) { col.sharedMesh = mf.mesh; }
         return mf;
     }
 }

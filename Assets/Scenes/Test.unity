@@ -251,12 +251,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHeight: 200
-  allowedPlacementMethods: 
+  allowedPlacementMethods: 00000000
   boxFitBias: 1
   shapeFitBias: 0
   ringFillBias: 0
   singleBuildingBias: 0
-  buildingVariants: []
+  buildingVariants:
+  - {fileID: 11400000, guid: e1a1fa76ff69d9c40afd34a71e5fe5a2, type: 2}
 --- !u!114 &160415012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1320,6 +1321,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0dd6bd7c1be52c488472dc8ac1de027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  squareChance: 20
 --- !u!1 &1084677775
 GameObject:
   m_ObjectHideFlags: 0

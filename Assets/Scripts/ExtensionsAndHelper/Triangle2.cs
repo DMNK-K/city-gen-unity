@@ -35,8 +35,8 @@ public struct Triangle2
 
     public Vector2 RandomPointInside()
     {
-        float r1 = Mathf.Sqrt(Random.Range(0, 1));
-        float r2 = Random.Range(0, 1);
-        return A * (1 - r1) + B * (r1 * (1 - r2)) + C * (r2 * r1);
+        float r1 = Mathf.Sqrt(Random.Range(0f, 1f));
+        float r2 = Random.Range(0f, 1f);
+        return (A * (1 - r1)) + (B * (r1 * (1 - r2))) + (C * (r2 * r1));
     }
 }

@@ -23,7 +23,7 @@ public class BuildingsGen : CityBlockContentGen
     private List<BuildingVariant> buildingVariants;
 
     private List<float> biases = new List<float>();
-    private Dictionary<BuildingPlacementMethod, BuildingPlacer> placers;
+    private Dictionary<BuildingPlacementMethod, BuildingPlacer> placers = new Dictionary<BuildingPlacementMethod, BuildingPlacer>();
 
     public float MaxHeight { get { return maxHeight; } }
 
