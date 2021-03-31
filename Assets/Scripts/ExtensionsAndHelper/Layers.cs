@@ -7,21 +7,9 @@ using UnityEngine;
 /// </summary>
 public class Layers
 {
-    private static readonly Dictionary<Layer, LayerMask> masks = new Dictionary<Layer, LayerMask>()
-    {
-        {Layer.Default, (1 << (int)Layer.Default)},
-        {Layer.TransparentFX, (1 << (int)Layer.TransparentFX)},
-        {Layer.IgnoreRaycast, (1 << (int)Layer.IgnoreRaycast)},
-        {Layer.Water, (1 << (int)Layer.Water)},
-        {Layer.RimSphere, (1 << (int)Layer.RimSphere)},
-        {Layer.Street, (1 << (int)Layer.Street)},
-        {Layer.CityBlockTerrain, (1 << (int)Layer.CityBlockTerrain)},
-        {Layer.Building, (1 << (int)Layer.Building) },
-    };
-
     public static LayerMask GetMask(Layer layer)
     {
-        return masks[layer];
+        return (1 << (int)layer);
     }
 }
 
@@ -35,6 +23,7 @@ public enum Layer
     UI = 5,
 
     //mine
+    Player = 9,
     RimSphere = 10,
     Street = 11,
     CityBlockTerrain = 12,
