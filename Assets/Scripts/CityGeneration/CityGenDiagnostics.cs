@@ -59,6 +59,7 @@ public class CityGenDiagnostics : MonoBehaviour
     public void CheckIfIntersectionPointsOverlap(List<IntersectionPoint> points)
     {
         int overlapping = 0;
+        string strPositions = "";
         for (int i = 0; i < points.Count; i++)
         {
             for (int o = 0; o < points.Count; o++)
@@ -67,12 +68,14 @@ public class CityGenDiagnostics : MonoBehaviour
                 if (points[i].Position.Similar(points[o].Position, 0.01f))
                 {
                     overlapping++;
+                    strPositions += points[o].Position.ToString() + " | ";
+                    Debug.DrawRay(points[o].Position.ShiftToV3(), Vector3.up * 10, new Color(1f, 0.5f, 0), 300f);
                 }
             }
         }
         if (overlapping > 0)
         {
-            DB.Error($"There are {overlapping} overlapping IntersectionPoints.");
+            DB.Error($"There are {overlapping} overlapping IntersectionPoints. {strPositions}");
         }
     }
 

@@ -85,7 +85,7 @@ public static class ExtVector
 
     public static Vector3 StripY(this Vector3 v3)
     {
-        return new Vector3(v3.z, 0, v3.z);
+        return new Vector3(v3.x, 0, v3.z);
     }
 
     public static Vector3 StripZ(this Vector3 v3)

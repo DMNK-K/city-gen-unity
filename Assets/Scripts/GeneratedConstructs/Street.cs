@@ -110,7 +110,8 @@ public class Street
             DB.Error("CornerBR is invalid");
         }
         CreateElevationOnEdges(elevGen);
-        DebugDraw(300f);
+        //DebugDraw(300f);
+        DebugDrawEdgePoints(300f);
     }
 
     void CreateElevationOnEdges(ElevationGen elevGen)
@@ -119,26 +120,23 @@ public class Street
         edgePointsRight.Clear();
         edgePointsLeft.Add(CornerAL);
         edgePointsRight.Add(CornerAR);
+        DB.Log($"CornerAL: {CornerAL} | CornerAR: {CornerAR} | CornerBL: {CornerBL} | CornerBR: {CornerBR}");
         float lengthLeft = Vector3.Distance(CornerAL.StripY(), CornerBL.StripY());
         float lengthRight = Vector3.Distance(CornerAR.StripY(), CornerBR.StripY());
         float diff = Mathf.Abs(lengthLeft - lengthRight);
-        float bonusToLeft = 0;
-        float bonusToRight = 0;
-        if (diff > 0.01f)
+        if (diff > 0.001f)
         {
             //lenghts are different, so we need to add 1 correcting point to the longer edge
             //so the rest of the edge has points spaced together on both sides with the same height
             Vector3 point;
             if (lengthLeft > lengthRight)
             {
-                bonusToLeft = diff;
                 point = CornerAL + Line.Dir.ShiftToV3() * diff;
                 point.y = CornerAR.y;
                 edgePointsLeft.Add(point);
             }
             else
             {
-                bonusToRight = diff;
                 point = CornerAR + Line.Dir.ShiftToV3() * diff;
                 point.y = CornerAL.y;
                 edgePointsRight.Add(point);
@@ -148,12 +146,13 @@ public class Street
         //and giving it to both edges
         float samplingDist = 10f;
         int innerEdgePoints = Mathf.FloorToInt(Mathf.Min(lengthLeft, lengthRight) / samplingDist);
-        for (int i = 1; i < innerEdgePoints + 1; i++)
+        DB.Log($"Length: {Vector2.Distance(Line.A, Line.B)} | lengthLeft: {lengthLeft} | lengthRight: {lengthRight} | innerEdgePoints: {innerEdgePoints}");
+        for (int i = 0; i < innerEdgePoints; i++)
         {
             Vector2 elevCoord = Vector2.Lerp(Line.A, Line.B, i / (innerEdgePoints + 1f));
             float elev = elevGen.GetFullElevation(elevCoord);
-            Vector3 pointLeft = CornerAL + Line.Dir.ShiftToV3() * (samplingDist * i + bonusToLeft);
-            Vector3 pointRight = CornerAR + Line.Dir.ShiftToV3() * (samplingDist * i + bonusToRight);
+            Vector3 pointLeft = edgePointsLeft.Last() + Line.Dir.ShiftToV3() * samplingDist;
+            Vector3 pointRight = edgePointsRight.Last() + Line.Dir.ShiftToV3() * samplingDist;
             pointLeft.y = elev;
             pointRight.y = elev;
             edgePointsLeft.Add(pointLeft);
@@ -161,6 +160,18 @@ public class Street
         }
         edgePointsLeft.Add(CornerBL);
         edgePointsRight.Add(CornerBR);
+    }
+
+    public void DebugDrawEdgePoints(float time)
+    {
+        for (int i = 0; i < edgePointsLeft.Count; i++)
+        {
+            Debug.DrawRay(edgePointsLeft[i], Vector3.up, Color.white, time);
+        }
+        for (int i = 0; i < edgePointsRight.Count; i++)
+        {
+            Debug.DrawRay(edgePointsRight[i], Vector3.up, Color.white, time);
+        }
     }
 
     /// <summary>

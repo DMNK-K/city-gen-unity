@@ -2562,15 +2562,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseLayer:
-    range: 40
+    range: 0
     spread: 1200
     originOffset: {x: 5000, y: 0}
   midLayer1:
-    range: 5
+    range: 0
     spread: 400
     originOffset: {x: 200, y: 500}
   midLayer2:
-    range: 5
+    range: 0
     spread: 400
     originOffset: {x: 0, y: 0}
   detailLayer:

@@ -99,7 +99,7 @@ public class IntersectionPoint
         if (Corners.Count != 4)
         {
             DB.Error("Invalid number of Corners in IntersectionPoint.");
-            Debug.DrawRay(Position.ShiftToV3(), Vector3.up * 30f, Color.magenta, 300f);
+            //Debug.DrawRay(Position.ShiftToV3(), Vector3.up * 30f, Color.magenta, 300f);
         }
     }
 

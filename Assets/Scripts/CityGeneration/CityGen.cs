@@ -74,7 +74,7 @@ public class CityGen : MonoBehaviour
         List<IntersectionPoint> interPoints = lineGen.GetPlacedInterPoints();
         diagnostics.CheckIfIntersectionPointsOverlap(interPoints);
         yield return StartCoroutine(lineExpander.ExpandStreetLines(streetLines, interPoints));
-        diagnostics.DebugDrawStreetLineCorners(streetLines, 300f);
+        //diagnostics.DebugDrawStreetLineCorners(streetLines, 300f);
         List<Intersection> intersections = lineVerticalizer.ConvertIntersectionPointsToIntersections(interPoints);
         List<Street> streets = lineVerticalizer.ConvertStreetLinesToStreets(streetLines);
         for (int i = 0; i < intersections.Count; i++)
@@ -86,15 +86,15 @@ public class CityGen : MonoBehaviour
         List<RimStreetLine> streetLinesOnRim = StreetLine.ExtractRimStreetLines(streetLines);
         yield return StartCoroutine(cityBlockGen.ExtractCityBlocks(intersections, streetLinesOnRim));
         yield return StartCoroutine(cityBlockGen.GenerateCityBlockTerrainMeshes());
-        List<CityBlock> blocks = cityBlockGen.Blocks;
-        cityBlockPurposeDeterminer.DeterminePurposeOfCityBlocks(blocks);
-        for (int i = 0; i < blocks.Count; i++)
-        {
-            if (cityBlockContentGenerators.ContainsKey(blocks[i].Purpose))
-            {
-                yield return StartCoroutine(cityBlockContentGenerators[blocks[i].Purpose].Generate(blocks[i]));
-            }
-        }
+        //List<CityBlock> blocks = cityBlockGen.Blocks;
+        //cityBlockPurposeDeterminer.DeterminePurposeOfCityBlocks(blocks);
+        //for (int i = 0; i < blocks.Count; i++)
+        //{
+        //    if (cityBlockContentGenerators.ContainsKey(blocks[i].Purpose))
+        //    {
+        //        yield return StartCoroutine(cityBlockContentGenerators[blocks[i].Purpose].Generate(blocks[i]));
+        //    }
+        //}
 
         FinalizeGeneration();
     }

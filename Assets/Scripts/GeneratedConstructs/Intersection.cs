@@ -57,8 +57,8 @@ public class Intersection
         m.vertices = verts;
         int[] tris = new int[6] { 0, 2, 1, 2, 3, 1 }; 
         m.triangles = tris;
+        Vector2[] normals = new Vector2[4] { Vector2.up, Vector2.up, Vector2.up, Vector2.up };
         //m.Subdivide4();
-        m.RecalculateNormals();
         m.RecalculateBounds();
         m.RecalculateTangents();
         return m;
