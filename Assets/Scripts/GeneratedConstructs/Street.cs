@@ -120,7 +120,7 @@ public class Street
         edgePointsRight.Clear();
         edgePointsLeft.Add(CornerAL);
         edgePointsRight.Add(CornerAR);
-        DB.Log($"CornerAL: {CornerAL} | CornerAR: {CornerAR} | CornerBL: {CornerBL} | CornerBR: {CornerBR}");
+        //DB.Log($"CornerAL: {CornerAL} | CornerAR: {CornerAR} | CornerBL: {CornerBL} | CornerBR: {CornerBR}");
         float lengthLeft = Vector3.Distance(CornerAL.StripY(), CornerBL.StripY());
         float lengthRight = Vector3.Distance(CornerAR.StripY(), CornerBR.StripY());
         float diff = Mathf.Abs(lengthLeft - lengthRight);
@@ -146,7 +146,7 @@ public class Street
         //and giving it to both edges
         float samplingDist = 10f;
         int innerEdgePoints = Mathf.FloorToInt(Mathf.Min(lengthLeft, lengthRight) / samplingDist);
-        DB.Log($"Length: {Vector2.Distance(Line.A, Line.B)} | lengthLeft: {lengthLeft} | lengthRight: {lengthRight} | innerEdgePoints: {innerEdgePoints}");
+        //DB.Log($"Length: {Vector2.Distance(Line.A, Line.B)} | lengthLeft: {lengthLeft} | lengthRight: {lengthRight} | innerEdgePoints: {innerEdgePoints}");
         for (int i = 0; i < innerEdgePoints; i++)
         {
             Vector2 elevCoord = Vector2.Lerp(Line.A, Line.B, i / (innerEdgePoints + 1f));
@@ -200,26 +200,48 @@ public class Street
         verts.Add(edgePointsLeft[0]);
         verts.Add(edgePointsRight[0]);
         int startL = 1, startR = 1;
+        //account for a correcting edgePoint that can exist and throw off the alg and traingle winding order for mesh:
         if (edgePointsLeft.Count != edgePointsRight.Count)
         {
             if (edgePointsLeft.Count > edgePointsRight.Count)
             {
                 verts.Add(edgePointsLeft[1]);
                 startL = 2;
+                tris.Add(1);
+                tris.Add(2);
+                tris.Add(3);
+
+                tris.Add(3);
+                tris.Add(4);
+                tris.Add(1);
             }
             else if (edgePointsLeft.Count < edgePointsRight.Count)
             {
                 verts.Add(edgePointsRight[1]);
-                startR = 2;
+                startR = 2;              
+                tris.Add(2);
+                tris.Add(0);
+                tris.Add(3);
+
+                tris.Add(3);
+                tris.Add(4);
+                tris.Add(2);
             }
             tris.Add(0);
-            tris.Add(1);
             tris.Add(2);
+            tris.Add(1);
         }
         for (int r = startR, l = startL;  r < edgePointsRight.Count && l < edgePointsLeft.Count; l++, r++)
         {
             verts.Add(edgePointsLeft[l]);
             verts.Add(edgePointsRight[r]);
+            
+            if (edgePointsLeft.Count != edgePointsRight.Count && r == startR && l == startL)
+            {
+                //skipping first iteration of triangle index assinging, since it was accounted for
+                //in the case of unequal edgePoint counts
+                continue;
+            }
             tris.Add(verts.Count - 4);
             tris.Add(verts.Count - 2);
             tris.Add(verts.Count - 3);
