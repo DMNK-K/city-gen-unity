@@ -6,8 +6,10 @@ public class BuildingPlacerBoxFit : BuildingPlacer
 {
     [SerializeField]
     private float squareChance = 20f;
+    [SerializeField]
+    private float buildingSeparation = 2f;
     private float minAreaFraction = 0.5f;
-    private int maxFindPositionFails = 300;
+    private int maxFindPositionFails = 400;
     private int maxResets = 10;
 
     private List<Quaternion> acceptableRotations = new List<Quaternion>();
@@ -21,7 +23,7 @@ public class BuildingPlacerBoxFit : BuildingPlacer
         FilterVariantsBasedOnAllowedHeight();
         float occupiedArea = 0;
         float occupiedAreaMin = block.Area * minAreaFraction;
-        DB.Log($"block.Area: {block.Area}");
+        //DB.Log($"block.Area: {block.Area}");
         int findPositionFailCounter = 0;
         int resetCounter = 0;
 
@@ -38,15 +40,13 @@ public class BuildingPlacerBoxFit : BuildingPlacer
             Quaternion rot = acceptableRotations.RandomElement();
             BuildingVariant pickedVariant = variants.RandomElement();
             float wallLengthX = pickedVariant.GetRandomWallLength();
-            float wallLengthZ = (GS.RChance(squareChance)) ? wallLengthX : pickedVariant.GetRandomWallLength();
+            float wallLengthZ = (GS.RChance(squareChance)) ? wallLengthX : pickedVariant.GetRandomWallLength(wallLengthX);
             Vector3 pos;
             bool foundPosition = TryFindSuitablePosition(pickedVariant, rot, wallLengthX, wallLengthZ, out pos);
             if (foundPosition)
             {
-                Debug.DrawRay(pos, Vector3.up * 10f, Color.yellow, 20f);
                 PlaceVariant(pickedVariant, pos, rot, wallLengthX, wallLengthZ);
                 occupiedArea += wallLengthX * wallLengthZ;
-                yield return null;
             }
             else
             {
@@ -74,7 +74,7 @@ public class BuildingPlacerBoxFit : BuildingPlacer
     private bool TryFindSuitablePosition(BuildingVariant variant, Quaternion rot, float xWall, float zWall, out Vector3 pos)
     {
         pos = block.GetRandomPoint();
-        Vector3 halfEx = new Vector3(xWall * 0.5f, buildingsGen.MaxHeight, zWall * 0.5f);
+        Vector3 halfEx = new Vector3(xWall * 0.5f + buildingSeparation, buildingsGen.MaxHeight, zWall * 0.5f + buildingSeparation);
         //for a position to be suitable, there needs to be no buildings there,
         //it has to not exceed the city block
         //and it has to allow a height that is within the range possible for the building variant

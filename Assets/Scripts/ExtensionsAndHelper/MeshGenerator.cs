@@ -59,10 +59,32 @@ public static class MeshGenerator
             23, 22, 20
         };
 
+        Vector3[] normals = new Vector3[24]
+        {
+            Vector3.down, Vector3.down, Vector3.down, Vector3.down,
+            Vector3.forward, Vector3.forward, Vector3.forward, Vector3.forward,
+            Vector3.back, Vector3.back, Vector3.back, Vector3.back,
+            Vector3.right, Vector3.right, Vector3.right, Vector3.right,
+            Vector3.left, Vector3.left, Vector3.left, Vector3.left,
+            Vector3.up, Vector3.up, Vector3.up, Vector3.up,
+        };
+
+        Vector2[] uvs = new Vector2[24]
+        {
+            Vector2.zero, new Vector2(1, 0), new Vector2(0, 1), Vector2.one,
+            Vector2.zero, new Vector2(1, 0), new Vector2(0, 1), Vector2.one,
+            Vector2.zero, new Vector2(1, 0), new Vector2(0, 1), Vector2.one,
+            Vector2.zero, new Vector2(1, 0), new Vector2(0, 1), Vector2.one,
+            Vector2.zero, new Vector2(1, 0), new Vector2(0, 1), Vector2.one,
+            Vector2.zero, new Vector2(1, 0), new Vector2(0, 1), Vector2.one,
+        };
+
         Mesh m = new Mesh();
         m.vertices = verts;
         m.triangles = tris;
-        m.RecalculateNormals();
+        m.normals = normals;
+        m.uv = uvs;
+        //m.RecalculateNormals();
         m.RecalculateBounds();
         m.RecalculateTangents();
         return m;
