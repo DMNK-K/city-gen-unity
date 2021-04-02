@@ -49,19 +49,14 @@ public class Intersection
     {
         if (Corners.Count != 4) { return null; }
         Mesh m = new Mesh();
-        Vector3[] verts = new Vector3[4] { Corners[0].Position, Corners[1].Position, Corners[2].Position, Corners[3].Position };
-        for (int i = 0; i < verts.Length; i++)
+        List<Vector3> verts = new List<Vector3> { Corners[0].Position, Corners[1].Position, Corners[2].Position, Corners[3].Position };
+        verts.SortAsPointsClockwiseAlongY();
+        for (int i = 0; i < verts.Count; i++)
         {
             verts[i] -= Position;
         }
-        m.vertices = verts;
-        int[] tris = new int[6] { 0, 2, 1, 2, 3, 1 }; 
-        m.triangles = tris;
-        Vector2[] normals = new Vector2[4] { Vector2.up, Vector2.up, Vector2.up, Vector2.up };
-        //m.Subdivide4();
-        m.RecalculateBounds();
-        m.RecalculateTangents();
-        return m;
+        List<int> tris = new List<int> { 0, 1, 2, 0, 2, 3}; 
+        return ExtMesh.BuildMesh(verts, tris);
     }
 
     public List<Mesh> BuildSidewalkMeshes()

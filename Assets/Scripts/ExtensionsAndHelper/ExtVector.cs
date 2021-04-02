@@ -228,4 +228,29 @@ public static class ExtVector
         float sin = Mathf.Sin(radians);
         return pivot + new Vector2(v.x * cos + v.y * sin, -v.x * sin + v.y * cos);
     }
+
+    /// <summary>
+    /// Sorts a list of points along y axis of the cente rof mass of these points, clockwise.
+    /// </summary>
+    public static void SortAsPointsClockwiseAlongY(this List<Vector3> list)
+    {
+        if (list == null || list.Count <= 1) { return; }
+        Vector3 center = Vector3.zero;
+        for (int i = 0; i <  list.Count; i++)
+        {
+            center += list[i];
+        }
+        center /= list.Count;
+        List<Vector4> listWithAngle = new List<Vector4>(list.Count);
+        for (int i = 0; i < list.Count; i++)
+        {
+            float angle = Vector3.SignedAngle(Vector3.forward, list[i] - center, Vector3.up);
+            listWithAngle.Add(new Vector4(list[i].x, list[i].y, list[i].z, angle));
+        }
+        listWithAngle.Sort((x, y) => (x.w < y.w) ? -1 : 1);
+        for (int i = 0; i < list.Count; i++)
+        {
+            list[i] = new Vector3(listWithAngle[i].x, listWithAngle[i].y, listWithAngle[i].z);
+        }
+    }
 }
