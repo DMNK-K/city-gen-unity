@@ -47,18 +47,22 @@ public class ElevationGen : MonoBehaviour
         return GetDetail(coord) + GetMid2(coord) + GetMid1(coord) + GetBase(coord);
     }
 
-    //public Texture2D CreateVisualization()
-    //{
-    //    int size = 1024;
-    //    Texture2D tex = new Texture2D(size, size);
-    //    tex.filterMode = FilterMode.Bilinear;
-    //    for (int y = 0; y < size; y++)
-    //    {
-    //        for (int x = 0; x < size; x++)
-    //        {
-    //            float val = GetFullElevation(new Vector2(x, y));
-    //            tex.SetPixel(x, y, new Color())
-    //        }
-    //    }
-    //}
+    public Texture2D MakeDebugTexture(float distPerPixel, int size)
+    {
+        Texture2D tex = new Texture2D(size, size);
+        tex.filterMode = FilterMode.Bilinear;
+        float start = -distPerPixel * size / 2;
+        float fullRange = baseLayer.Range + midLayer1.Range + midLayer2.Range + detailLayer.Range;
+        for (int y = 0; y < size; y++)
+        {
+            for (int x = 0; x < size; x++)
+            {
+                float val = GetFullElevation(new Vector2(start + distPerPixel * x, start + distPerPixel * y));
+                val = GS.DualLerp(0f, 1f, -fullRange, fullRange, val);
+                tex.SetPixel(x, y, new Color(val, val, val));
+            }
+        }
+        tex.Apply();
+        return tex;
+    }
 }

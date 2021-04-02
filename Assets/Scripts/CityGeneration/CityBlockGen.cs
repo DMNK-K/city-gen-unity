@@ -70,7 +70,7 @@ public class CityBlockGen : MonoBehaviour
                     {
                         Blocks.Add(block);
                         block.DebugDraw(300f);
-                        DB.Log(block.ToString());
+                        //DB.Log(block.ToString());
                         //yield return new WaitForSeconds(1f);
                     }
                 }

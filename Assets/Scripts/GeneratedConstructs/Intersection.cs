@@ -48,15 +48,17 @@ public class Intersection
     public Mesh BuildCarLaneMesh()
     {
         if (Corners.Count != 4) { return null; }
-        Mesh m = new Mesh();
+        
         List<Vector3> verts = new List<Vector3> { Corners[0].Position, Corners[1].Position, Corners[2].Position, Corners[3].Position };
         verts.SortAsPointsClockwiseAlongY();
         for (int i = 0; i < verts.Count; i++)
         {
             verts[i] -= Position;
         }
-        List<int> tris = new List<int> { 0, 1, 2, 0, 2, 3}; 
-        return ExtMesh.BuildMesh(verts, tris);
+        List<int> tris = new List<int> { 0, 1, 2, 0, 2, 3};
+        Mesh m = ExtMesh.BuildMesh(verts, tris);
+        m.Subdivide(2);
+        return m;
     }
 
     public List<Mesh> BuildSidewalkMeshes()
@@ -123,6 +125,7 @@ public class Intersection
                 DB.Error("Corner of Intersection can't be built because of invalid n of connections");
             }
             meshes.Add(ExtMesh.BuildMesh(verts, tris));
+            
         }
         return meshes;
     }

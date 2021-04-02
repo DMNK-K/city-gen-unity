@@ -13,6 +13,8 @@ public class SmartPerlin
     [SerializeField]
     private Vector2 originOffset;
 
+    public float Range { get { return range; } }
+
     private Vector2 origin = Vector2.zero;
     
     public void RandomizeOrigin()

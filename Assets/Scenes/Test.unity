@@ -2562,20 +2562,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseLayer:
-    range: 0
-    spread: 1200
+    range: 15
+    spread: 1000
     originOffset: {x: 5000, y: 0}
   midLayer1:
-    range: 0
+    range: 2.5
     spread: 400
     originOffset: {x: 200, y: 500}
   midLayer2:
-    range: 0
+    range: 2.5
     spread: 400
     originOffset: {x: 0, y: 0}
   detailLayer:
-    range: 1
-    spread: 5
+    range: 0.25
+    spread: 4
     originOffset: {x: 0, y: 0}
 --- !u!114 &1856975218
 MonoBehaviour:
@@ -2601,7 +2601,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9a77bca0fa25dc4ca69b7bbd498a6ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sidewalkHeight: 0.3
+  sidewalkHeight: 0.2
 --- !u!114 &1856975220
 MonoBehaviour:
   m_ObjectHideFlags: 0

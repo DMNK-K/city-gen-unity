@@ -123,6 +123,7 @@ public class StreetLineGen : MonoBehaviour
             {
                 Vector2 streetLineStart = (i == 0) ? start : potentiallyCrossed[i - 1].intersection;
                 Vector2 streetLineEnd = (i == potentiallyCrossed.Count) ? end : potentiallyCrossed[i].intersection;
+                if(streetLineStart == streetLineEnd) { DB.Log("StreetLine start and end are same."); }
                 //DB.Log($"streetLineStart: {streetLineStart} | streetLineEnd: {streetLineEnd} | dir: {dir} | i: {i}/{potentiallyCrossed.Count}");
                 if (Vector2.Distance(streetLineStart, streetLineEnd) < minSeparation)
                 {
@@ -131,14 +132,14 @@ public class StreetLineGen : MonoBehaviour
                     //for placing intersection meshes
                     //we also need a separate check for this, because the regular separation check only takes
                     //into account separation with lines that are nearly paralell
-                    DB.Log("Length too small");
+                    //DB.Log("Length too small");
                     break;
                 }
                 if (!PotentialLineHasCorrectSeparation(streetLineStart, streetLineEnd, placed))
                 {
                     //we need to check if this potential line isn't to close to other lines that are running nearly paralel to it
                     //to prevent creating narrow city blocks
-                    DB.Log("Separation not correct.");
+                    //DB.Log("Separation not correct.");
                     break;
                 }
                 StreetLine lineOnStart = null;
@@ -164,8 +165,7 @@ public class StreetLineGen : MonoBehaviour
                 wholeStreetsCount += 1;
             }
             yield return null;
-            
-            DB.Log("");
+         
             if (tries == maxTriesPerLine) //safety feature
             {
                 tries = 0;
@@ -231,7 +231,7 @@ public class StreetLineGen : MonoBehaviour
         if (GS.RChance(diagonalChance))
         {
             Vector2 result = diags.RandomElement();
-            while (Vector2.Dot(result, (toAvoid.A - toAvoid.B).normalized) > 0.5)
+            while (Mathf.Abs(Vector2.Dot(result, (toAvoid.A - toAvoid.B).normalized)) > 0.5)
             {
                 result = diags.RandomElement();
             }

@@ -111,7 +111,7 @@ public class Street
         }
         CreateElevationOnEdges(elevGen);
         //DebugDraw(300f);
-        DebugDrawEdgePoints(300f);
+        //DebugDrawEdgePoints(300f);
     }
 
     void CreateElevationOnEdges(ElevationGen elevGen)
@@ -144,7 +144,7 @@ public class Street
         }
         //sampling elevation from the middle of the line in points separated by samplingDist
         //and giving it to both edges
-        float samplingDist = 10f;
+        float samplingDist = 8f;
         int innerEdgePoints = Mathf.FloorToInt(Mathf.Min(lengthLeft, lengthRight) / samplingDist);
         //DB.Log($"Length: {Vector2.Distance(Line.A, Line.B)} | lengthLeft: {lengthLeft} | lengthRight: {lengthRight} | innerEdgePoints: {innerEdgePoints}");
         for (int i = 0; i < innerEdgePoints; i++)
@@ -250,7 +250,9 @@ public class Street
             tris.Add(verts.Count - 2);
             tris.Add(verts.Count - 1);
         }
-        return ExtMesh.BuildMesh(verts, tris);
+        Mesh m = ExtMesh.BuildMesh(verts, tris);
+        //m.Subdivide4();
+        return m;
     }
 
     public Mesh BuildSidewalkMeshLeft() => BuildSidewalkMesh(true);
@@ -305,7 +307,9 @@ public class Street
                 tris.Add(n + 10);
             }
         }
-        return ExtMesh.BuildMesh(verts, tris);
+        Mesh m = ExtMesh.BuildMesh(verts, tris);
+        m.Subdivide4();
+        return m;
     }
 
     public void DebugDraw(float time)

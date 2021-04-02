@@ -103,6 +103,7 @@ public class CityBlock
         m.RecalculateBounds();
         m.RecalculateNormals();
         m.RecalculateTangents();
+        m.Subdivide((Area > 3000) ? 9 : 4);
         return m;
     }
 
